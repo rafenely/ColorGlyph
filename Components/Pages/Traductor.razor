@@ -1,0 +1,150 @@
+@page "/"
+@using Microsoft.AspNetCore.Components.Web
+@rendermode InteractiveServer
+@using LenguajeDeColores.Services
+@using LenguajeDeColores.Models
+@inject TraductorService TraductorService
+
+<PageTitle>Traductor de Colores</PageTitle>
+
+<h1>Lenguaje de Colores</h1>
+
+<input @bind="textoUsuario" @bind:event="oninput" placeholder="Escribe algo..." class="form-control" />
+<div class="hoja-libreta mt-4">
+    @foreach (var palabra in textoUsuario.Split(' '))
+    {
+        <div class="grupo-palabra">
+            @foreach (var cuadricula in TraductorService.TraducirTexto(palabra))
+            {
+                <div class="cuadro-letra">
+                    <div class="marco-dibujo">
+                        <div class="rejilla-puntos">
+                            @foreach (var color in cuadricula.ColoresSerializados.Split(','))
+                            {
+                                <div class="punto @GetFormaClass(cuadricula.Forma)" style="background-color: @TraducirColor(color);"></div>
+                            }
+                        </div>
+                    </div>
+                    @*<span class="etiqueta-letra">@cuadricula.Letra</span>*@
+                </div>
+            }
+        </div>
+    }
+</div>
+<style>
+    /* El fondo de la zona donde aparecen las letras */
+    .hoja-libreta {
+        background-color: #ffffff;
+        /*background-image: radial-gradient(#d1d1d1 1.5px, transparent 1.5px);
+        background-size: 30px 30px; /* Tamaño de la cuadrícula de fondo */
+        padding: 50px;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.05), 0 5px 15px rgba(0,0,0,0.1);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 25px;
+        min-height: 300px;
+        align-content: flex-start;
+    }
+    .cuadro-letra {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .grupo-palabra {
+            display: flex;
+            flex-wrap: nowrap; /* IMPORTANTE: Las letras de una palabra NO se separan */
+            gap: 10px;         /* Espacio entre letras de la misma palabra */
+        }
+    /* El marco individual de cada letra */
+    .marco-dibujo {
+        background: rgba(83, 52, 52, 0);
+        /*border: 2px solid #444;*/
+        padding: 0px;
+        border-radius: 4px;
+        /*  box-shadow: 3px 3px 0px #888; /* Efecto de relieve */
+    }
+
+    .rejilla-puntos {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        width: 50px;
+        height: 50px;
+    }
+
+    .punto {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 1px solid rgba(0, 0, 0, 0);
+    }
+    .forma-circulo { border-radius: 50%; }
+    .forma-cuadrado { border-radius: 2px; }
+
+    .forma-triangulo {
+        clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    }
+
+    .forma-rombo {
+        clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    }
+
+    .forma-estrella {
+        clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    }
+    .etiqueta-letra {
+        display: block;
+        text-align: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: bold;
+        color: #666;
+        margin-top: 10px;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+    }
+</style>
+@*<div class="alert alert-info">
+    Debug: Texto escrito: "<b>@textoUsuario</b>" | Cuadros encontrados en DB: <b>@cantidadEncontrada</b>
+</div>
+
+<input value="@textoUsuario" 
+       @oninput="@((e) => ActualizarTraduccion(e))" 
+       class="form-control" 
+       placeholder="Escribe aquí..." />
+<button class="btn btn-primary" @onclick='() => textoUsuario = "BOTON FUNCIONA"'>
+    Probar Conexión
+</button>*@
+@code {
+    private string textoUsuario = "";
+    private int cantidadEncontrada = 0;
+
+    // Esta función se ejecutará cada vez que cambie el texto
+    private void ActualizarTraduccion(ChangeEventArgs e)
+    {
+        textoUsuario = e.Value?.ToString() ?? "";
+        var resultado = TraductorService.TraducirTexto(textoUsuario);
+        cantidadEncontrada = resultado.Count;
+    }
+
+    private string TraducirColor(string nombre) => nombre.ToLower().Trim() switch
+    {
+        "amarillo" => "#FFD700",
+        "azul" => "#0000FF",
+        "rojo" => "#E32B00",
+        "verde" => "#008000",
+        "naranja" => "#FFA500",
+        "morado" => "#800080",
+        _ => "#FFFFFF" // Gris si no reconoce el nombre
+    };
+
+    private string GetFormaClass(string forma) => forma?.ToLower() switch
+    {
+        "circulo" => "forma-circulo",
+        "triangulo" => "forma-triangulo",
+        "rombo" => "forma-rombo",
+        "estrella" => "forma-estrella",
+        _ => "forma-cuadrado" // Por defecto cuadrado
+    };
+}
