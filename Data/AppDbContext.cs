@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
-using LenguajeDeColores.Models;
+using ColorGlyphs.Models;
 
-namespace LenguajeDeColores.Data;
+namespace ColorGlyphs.Data;
 
 public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
     // Esta es tu tabla de letras
-    public DbSet<Cuadricula> Cuadriculas => Set<Cuadricula>();
+    public DbSet<GlyphModel> Glyphs => Set<GlyphModel>();
 }

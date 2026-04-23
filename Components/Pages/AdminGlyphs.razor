@@ -1,0 +1,116 @@
+@page "/admin"
+@using ColorGlyphs
+@using ColorGlyphs.Models
+@using ColorGlyphs.Components
+@using ColorGlyphs.Components.Shared
+@using ColorGlyphs.Services
+
+@inject GlyphService GlyphService
+
+<h3 class="mb-4">Administración de ColorGlyphs</h3>
+
+<div class="card p-4 mb-5 shadow-sm">
+    <h5>@(editandoId == 0 ? "Agregar Nuevo Glifo" : "Modificando Glifo")</h5>
+    <div class="row g-3">
+        <div class="col-md-2">
+            <label class="form-label">Carácter/Símbolo</label>
+            <input type="text" class="form-control" @bind="nuevoGlyph.Caracter" maxlength="1" />
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Tipo</label>
+            <select class="form-select" @bind="nuevoGlyph.Tipo">
+                <option value="Normal">Normal</option>
+                <option value="Especial">Especial</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Formas (separadas por coma)</label>
+            <input type="text" class="form-control" @bind="nuevoGlyph.Forma" placeholder="Circulo,Triangulo..." />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Colores (separados por coma)</label>
+            <input type="text" class="form-control" @bind="nuevoGlyph.Colores" placeholder="Rojo,Azul..." />
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button class="btn btn-primary w-100" @onclick="Guardar">
+                @(editandoId == 0 ? "Añadir" : "Actualizar")
+            </button>
+        </div>
+    </div>
+</div>
+
+<table class="table table-hover align-middle">
+    <thead class="table-dark">
+        <tr>
+            <th>Carácter</th>
+            <th>Tipo</th>
+            <th>Formas</th>
+            <th>Colores</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var g in todosLosGlyphs)
+        {
+            <tr>
+                <td><strong>@g.Caracter</strong></td>
+                <td><span class="badge @(g.Tipo == "Especial" ? "bg-warning text-dark" : "bg-info")">@g.Tipo</span></td>
+                <td><small>@g.Forma</small></td>
+                <td><small>@g.Colores</small></td>
+                <td>
+                    <button class="btn btn-sm btn-outline-secondary me-2"
+                            @onclick="() => CargarParaEditar(g)">Editar</button>
+                    <button class="btn btn-sm btn-outline-danger" @onclick="() => Borrar(g.Id)">Borrar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<GlyphModel> todosLosGlyphs = new();
+    private GlyphModel nuevoGlyph = new();
+    private int editandoId = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarLista();
+    }
+
+    private async Task CargarLista()
+    {
+        todosLosGlyphs = await GlyphService.ObtenerTodos();
+    }
+
+    private async Task Guardar()
+    {
+        if (string.IsNullOrEmpty(nuevoGlyph.Caracter)) return;
+
+        if (editandoId == 0) await GlyphService.Crear(nuevoGlyph);
+        else await GlyphService.Actualizar(nuevoGlyph);
+
+        nuevoGlyph = new();
+        editandoId = 0;
+        await CargarLista();
+    }
+
+    private void CargarParaEditar(GlyphModel g)
+    {
+        nuevoGlyph = new GlyphModel
+        {
+            Id = g.Id,
+            Caracter = g.Caracter,
+            Tipo = g.Tipo,
+            Forma = g.Forma,
+            Colores = g.Colores
+        };
+        // Clon simple
+        editandoId = g.Id;
+    }
+
+    private async Task Borrar(int id)
+    {
+        await GlyphService.Eliminar(id);
+        await CargarLista();
+    }
+}

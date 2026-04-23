@@ -1,17 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
-using LenguajeDeColores.Data;
-using LenguajeDeColores.Services;
+using ColorGlyphs.Data;
+using ColorGlyphs.Services;
 
-namespace LenguajeDeColores.Controllers;
+namespace ColorGlyphs.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 public class TraductorController : ControllerBase
 {
-    private readonly TraductorService _traductorService;
-     private readonly AppDbContext _context;
+    private readonly GlyphService _traductorService;
+    private readonly AppDbContext _context;
 
-    public TraductorController(TraductorService traductorService, AppDbContext context)
+    public TraductorController(GlyphService traductorService, AppDbContext context)
     {
         _traductorService = traductorService;
         _context = context;
@@ -25,15 +25,15 @@ public class TraductorController : ControllerBase
     }
 
     [HttpPost("guardar")]
-    public IActionResult GuardarLetra([FromBody] LenguajeDeColores.Models.Cuadricula nuevaLetra)
+    public IActionResult GuardarLetra([FromBody] Models.GlyphModel nuevaLetra)
     {
         // Verificamos si la letra ya existe en la base de datos
-        var existe = _context.Cuadriculas.Any(c => c.Letra == nuevaLetra.Letra);
+        var existe = _context.Glyphs.Any(c => c.Caracter == nuevaLetra.Caracter);
         if (existe) return BadRequest("Esta letra ya está registrada.");
 
-        _context.Cuadriculas.Add(nuevaLetra);
+        _context.Glyphs.Add(nuevaLetra);
         _context.SaveChanges();
 
-        return Ok($"Letra {nuevaLetra.Letra} guardada correctamente.");
+        return Ok($"Letra {nuevaLetra.Caracter} guardada correctamente.");
     }
 }

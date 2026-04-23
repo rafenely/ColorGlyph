@@ -1,31 +1,54 @@
 @page "/"
+@using ColorGlyphs
+@using ColorGlyphs.Components
+@using ColorGlyphs.Components.Shared
+@using ColorGlyphs.Models
+@using ColorGlyphs.Services
 @using Microsoft.AspNetCore.Components.Web
 @rendermode InteractiveServer
-@using LenguajeDeColores.Services
-@using LenguajeDeColores.Models
-@inject TraductorService TraductorService
+@inject GlyphService GlyphService
 
 <PageTitle>Traductor de Colores</PageTitle>
 
 <h1>Lenguaje de Colores</h1>
 
 <input @bind="textoUsuario" @bind:event="oninput" placeholder="Escribe algo..." class="form-control" />
+<div class="form-check form-switch mb-3">
+    <input class="form-check-input" type="checkbox" id="checkMostrar" @bind="mostrarLetras" />
+    <label class="form-check-label" for="checkMostrar">
+        Mostrar etiquetas de letras
+    </label>
+</div>
 <div class="hoja-libreta mt-4">
     @foreach (var palabra in textoUsuario.Split(' '))
     {
         <div class="grupo-palabra">
-            @foreach (var cuadricula in TraductorService.TraducirTexto(palabra))
+            @foreach (var cuadricula in GlyphService.TraducirTexto(palabra))
             {
                 <div class="cuadro-letra">
                     <div class="marco-dibujo">
                         <div class="rejilla-puntos">
-                            @foreach (var color in cuadricula.ColoresSerializados.Split(','))
-                            {
-                                <div class="punto @GetFormaClass(cuadricula.Forma)" style="background-color: @TraducirColor(color);"></div>
+                            @{
+                                // Preparamos las listas de forma segura
+                                var colores = cuadricula.Colores.Split(',');
+                                var formas = cuadricula.Forma.Split(',');
                             }
+                            @for(int i= 0; i<colores.Length; i++)
+                            {
+                                var formaActual = (cuadricula.Tipo == "Especial" && i < formas.Length) 
+                                                    ? formas[i] 
+                                                    : cuadricula.Forma;
+
+                                <div class="punto @GetFormaClass(formaActual)" 
+                                        style="background-color: @TraducirColor(colores[i]);">
+                                </div>                                      
+                                }
                         </div>
                     </div>
-                    @*<span class="etiqueta-letra">@cuadricula.Letra</span>*@
+                    @if(mostrarLetras)
+                    {
+                        <span class="etiqueta-letra">@cuadricula.Caracter</span>@**@
+                    }
                 </div>
             }
         </div>
@@ -119,12 +142,13 @@
 @code {
     private string textoUsuario = "";
     private int cantidadEncontrada = 0;
+    private bool mostrarLetras = false;
 
     // Esta función se ejecutará cada vez que cambie el texto
     private void ActualizarTraduccion(ChangeEventArgs e)
     {
         textoUsuario = e.Value?.ToString() ?? "";
-        var resultado = TraductorService.TraducirTexto(textoUsuario);
+        var resultado = GlyphService.TraducirTexto(textoUsuario);
         cantidadEncontrada = resultado.Count;
     }
 

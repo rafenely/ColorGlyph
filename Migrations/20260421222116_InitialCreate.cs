@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace LenguajeDeColores.Migrations
+namespace ColorGlyphs.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
