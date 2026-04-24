@@ -1,8 +1,0 @@
-D:\Users\ricar\repos\LenguajeDeColores\obj\Debug\net9.0\LenguajeDeColores.csproj.AssemblyReference.cache
-D:\Users\ricar\repos\LenguajeDeColores\obj\Debug\net9.0\rpswa.dswa.cache.json
-D:\Users\ricar\repos\LenguajeDeColores\obj\Debug\net9.0\LenguajeDeColores.GeneratedMSBuildEditorConfig.editorconfig
-D:\Users\ricar\repos\LenguajeDeColores\obj\Debug\net9.0\LenguajeDeColores.AssemblyInfoInputs.cache
-D:\Users\ricar\repos\LenguajeDeColores\obj\Debug\net9.0\LenguajeDeColores.AssemblyInfo.cs
-D:\Users\ricar\repos\LenguajeDeColores\obj\Debug\net9.0\LenguajeDeColores.csproj.CoreCompileInputs.cache
-D:\Users\ricar\repos\LenguajeDeColores\obj\Debug\net9.0\LenguajeDeColores.MvcApplicationPartsAssemblyInfo.cache
-D:\Users\ricar\repos\LenguajeDeColores\obj\Debug\net9.0\LenguajeDeColores.sourcelink.json

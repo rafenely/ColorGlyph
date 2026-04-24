@@ -1,6 +1,6 @@
-@LenguajeDeColores_HostAddress = http://localhost:5034
+@ColorGlyph_HostAddress = http://localhost:5034
 
-GET {{LenguajeDeColores_HostAddress}}/weatherforecast/
+GET {{ColorGlyph_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###

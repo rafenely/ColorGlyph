@@ -6,8 +6,8 @@
 @using ColorGlyphs.Services
 
 @inject GlyphService GlyphService
-
-<h3 class="mb-4">Administración de ColorGlyphs</h3>
+@rendermode InteractiveServer
+<h3 class="mb-4">Administración de Glyphos</h3>
 
 <div class="card p-4 mb-5 shadow-sm">
     <h5>@(editandoId == 0 ? "Agregar Nuevo Glifo" : "Modificando Glifo")</h5>
@@ -16,16 +16,9 @@
             <label class="form-label">Carácter/Símbolo</label>
             <input type="text" class="form-control" @bind="nuevoGlyph.Caracter" maxlength="1" />
         </div>
-        <div class="col-md-2">
-            <label class="form-label">Tipo</label>
-            <select class="form-select" @bind="nuevoGlyph.Tipo">
-                <option value="Normal">Normal</option>
-                <option value="Especial">Especial</option>
-            </select>
-        </div>
         <div class="col-md-3">
-            <label class="form-label">Formas (separadas por coma)</label>
-            <input type="text" class="form-control" @bind="nuevoGlyph.Forma" placeholder="Circulo,Triangulo..." />
+            <label class="form-label">Formas (ej: circulo,triangulo)</label>
+            <input type="text" class="form-control" @bind="formasTexto" placeholder="Circulo,Triangulo..." />
         </div>
         <div class="col-md-3">
             <label class="form-label">Colores (separados por coma)</label>
@@ -43,19 +36,22 @@
     <thead class="table-dark">
         <tr>
             <th>Carácter</th>
-            <th>Tipo</th>
             <th>Formas</th>
             <th>Colores</th>
             <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var g in todosLosGlyphs)
+        @foreach (var g in todosLosGlyphs.OrderBy(x => x.Caracter))
         {
             <tr>
                 <td><strong>@g.Caracter</strong></td>
-                <td><span class="badge @(g.Tipo == "Especial" ? "bg-warning text-dark" : "bg-info")">@g.Tipo</span></td>
-                <td><small>@g.Forma</small></td>
+                <td>
+                    @foreach (var gf in g.GlyphForms)
+                    {
+                        <span class="badge bg-secondary me-1">@gf.Form.Description</span>
+                    }
+                </td>
                 <td><small>@g.Colores</small></td>
                 <td>
                     <button class="btn btn-sm btn-outline-secondary me-2"
@@ -70,6 +66,7 @@
 @code {
     private List<GlyphModel> todosLosGlyphs = new();
     private GlyphModel nuevoGlyph = new();
+    private string formasTexto = ""; // Para manejar el input de texto
     private int editandoId = 0;
 
     protected override async Task OnInitializedAsync()
@@ -86,10 +83,14 @@
     {
         if (string.IsNullOrEmpty(nuevoGlyph.Caracter)) return;
 
+        nuevoGlyph.Tipo = GlyphService.GetGlyphType(nuevoGlyph);
+        nuevoGlyph.GlyphForms = await GlyphService.ConvertirTextoAFormas(formasTexto);
+
         if (editandoId == 0) await GlyphService.Crear(nuevoGlyph);
         else await GlyphService.Actualizar(nuevoGlyph);
 
         nuevoGlyph = new();
+        formasTexto = "";
         editandoId = 0;
         await CargarLista();
     }
@@ -101,10 +102,21 @@
             Id = g.Id,
             Caracter = g.Caracter,
             Tipo = g.Tipo,
-            Forma = g.Forma,
+            GlyphForms = g.GlyphForms,
             Colores = g.Colores
         };
-        // Clon simple
+        
+        if (g.GlyphForms != null && g.GlyphForms.Any())
+        {
+            formasTexto = string.Join(",", g.GlyphForms
+                .Select(gf => gf.Form?.Description)
+                .Where(d => d != null));
+        }
+        else
+        {
+            formasTexto = "";
+        }
+    
         editandoId = g.Id;
     }
 

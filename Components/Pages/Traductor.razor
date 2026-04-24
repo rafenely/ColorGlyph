@@ -5,14 +5,25 @@
 @using ColorGlyphs.Models
 @using ColorGlyphs.Services
 @using Microsoft.AspNetCore.Components.Web
+@using System.Runtime.InteropServices
 @rendermode InteractiveServer
 @inject GlyphService GlyphService
 
 <PageTitle>Traductor de Colores</PageTitle>
 
-<h1>Lenguaje de Colores</h1>
+<h1>ColorGlyph</h1>
 
-<input @bind="textoUsuario" @bind:event="oninput" placeholder="Escribe algo..." class="form-control" />
+@*<input @bind="textoUsuario" @bind:event="oninput" placeholder="Escribe algo..." class="form-control" />*@
+<div class="traductor-container">
+    <label>Escribe tu mensaje:</label>
+    @* Cambiamos input por textarea y vinculamos la variable *@
+    <textarea class="form-control" 
+              @bind="textoUsuario" 
+              @bind:event="oninput" 
+              rows="4" 
+              placeholder="Escribe aquí...">
+    </textarea>
+</div>
 <div class="form-check form-switch mb-3">
     <input class="form-check-input" type="checkbox" id="checkMostrar" @bind="mostrarLetras" />
     <label class="form-check-label" for="checkMostrar">
@@ -20,27 +31,36 @@
     </label>
 </div>
 <div class="hoja-libreta mt-4">
-    @foreach (var palabra in textoUsuario.Split(' '))
-    {
-        <div class="grupo-palabra">
-            @foreach (var cuadricula in GlyphService.TraducirTexto(palabra))
+    
+        @foreach (var cuadricula in GlyphService.TraducirTexto(textoUsuario))
+        {
+            @if (cuadricula.Tipo == "Salto")
+            {
+                @* Esta línea fuerza a los siguientes glifos a ir a la fila de abajo *@
+                <div class="flex-break" style="flex-basis: 100%; height: 20px;"></div>
+            }
+            else
             {
                 <div class="cuadro-letra">
                     <div class="marco-dibujo">
                         <div class="rejilla-puntos">
                             @{
+
                                 // Preparamos las listas de forma segura
                                 var colores = cuadricula.Colores.Split(',');
-                                var formas = cuadricula.Forma.Split(',');
+                                var formas = cuadricula.GlyphForms;
+
                             }
                             @for(int i= 0; i<colores.Length; i++)
                             {
-                                var formaActual = (cuadricula.Tipo == "Especial" && i < formas.Length) 
-                                                    ? formas[i] 
-                                                    : cuadricula.Forma;
 
-                                <div class="punto @GetFormaClass(formaActual)" 
-                                        style="background-color: @TraducirColor(colores[i]);">
+                                var formaActual = (cuadricula.Tipo == "Especial" && i < formas.Count()) 
+                                                    ? formas[i].Form.Description 
+                                                    : cuadricula.GlyphForms.First().Form.Description;
+
+
+                                <div class="punto " 
+                                        style=" @GetFormaStyle(formaActual)  background-color: @TraducirColor(colores[i]);">
                                 </div>                                      
                                 }
                         </div>
@@ -51,8 +71,8 @@
                     }
                 </div>
             }
-        </div>
-    }
+        }
+    
 </div>
 <style>
     /* El fondo de la zona donde aparecen las letras */
@@ -69,11 +89,13 @@
         gap: 25px;
         min-height: 300px;
         align-content: flex-start;
+        gap: 5px;
     }
     .cuadro-letra {
         display: flex;
         flex-direction: column;
         align-items: center;
+        margin: 2px;
     }
     .grupo-palabra {
             display: flex;
@@ -100,7 +122,7 @@
     .punto {
         width: 20px;
         height: 20px;
-        border-radius: 50%;
+        @*border-radius: 50%;*@
         border: 1px solid rgba(0, 0, 0, 0);
     }
     .forma-circulo { border-radius: 50%; }
@@ -152,23 +174,17 @@
         cantidadEncontrada = resultado.Count;
     }
 
-    private string TraducirColor(string nombre) => nombre.ToLower().Trim() switch
+    private string TraducirColor(string forma)
     {
-        "amarillo" => "#FFD700",
-        "azul" => "#0000FF",
-        "rojo" => "#E32B00",
-        "verde" => "#008000",
-        "naranja" => "#FFA500",
-        "morado" => "#800080",
-        _ => "#FFFFFF" // Gris si no reconoce el nombre
-    };
+        var dbColor = GlyphService.GetColorCode(forma);
+        Console.WriteLine("/*/*/*/*/*/*/");
+        Console.WriteLine(dbColor);
+        return dbColor;
+    }
 
-    private string GetFormaClass(string forma) => forma?.ToLower() switch
+    private string GetFormaStyle(string forma)
     {
-        "circulo" => "forma-circulo",
-        "triangulo" => "forma-triangulo",
-        "rombo" => "forma-rombo",
-        "estrella" => "forma-estrella",
-        _ => "forma-cuadrado" // Por defecto cuadrado
-    };
+        var dbForma = GlyphService.GetFormCode(forma);
+        return dbForma;
+    }
 }

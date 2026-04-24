@@ -1,0 +1,99 @@
+@page "/adminForms"
+@using ColorGlyphs
+@using ColorGlyphs.Models
+@using ColorGlyphs.Components
+@using ColorGlyphs.Components.Shared
+@using ColorGlyphs.Services
+
+@inject GlyphService GlyphService
+@rendermode InteractiveServer
+<h3 class="mb-4">Administración de Formas</h3>
+
+<div class="card p-4 mb-5 shadow-sm">
+    <h5>@(editandoId == 0 ? "Agregar Nueva Forma" : "Modificando Forma")</h5>
+    <div class="row g-3">
+        <div class="col-md-2">
+            <label class="form-label">Descripcion</label>
+            <input type="text" class="form-control" @bind="nuevoGlyphForm.Description" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Codigo</label>
+            <input type="text" class="form-control" @bind="nuevoGlyphForm.Code"
+                   placeholder="clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);" />
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button class="btn btn-primary w-100" @onclick="Guardar">
+                @(editandoId == 0 ? "Añadir" : "Actualizar")
+            </button>
+        </div>
+    </div>
+</div>
+
+<table class="table table-hover align-middle">
+    <thead class="table-dark">
+        <tr>
+            <th>Descripcion</th>
+            <th>Codigo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var g in todasLasFormas.OrderBy(x => x.Description))
+        {
+            <tr>
+                <td><strong>@g.Description</strong></td>
+                <td><small>@g.Code</small></td>
+                <td>
+                    <button class="btn btn-sm btn-outline-secondary me-2"
+                            @onclick="() => CargarParaEditar(g)">Editar</button>
+                    <button class="btn btn-sm btn-outline-danger" @onclick="() => Borrar(g.Id)">Borrar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<FormModel> todasLasFormas = new();
+    private FormModel nuevoGlyphForm = new();
+    private int editandoId = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarLista();
+    }
+
+    private async Task CargarLista()
+    {
+        todasLasFormas = await GlyphService.ObtenerFormas();
+    }
+
+    private async Task Guardar()
+    {
+        if (string.IsNullOrEmpty(nuevoGlyphForm.Description)) return;
+        if (editandoId == 0) await GlyphService.CrearForma(nuevoGlyphForm);
+        else await GlyphService.ActualizarForma(nuevoGlyphForm);
+
+        nuevoGlyphForm = new();
+        editandoId = 0;
+        await CargarLista();
+    }
+
+    private void CargarParaEditar(FormModel g)
+    {
+        nuevoGlyphForm = new FormModel
+        {
+            Id = g.Id,
+            Description = g.Description,
+            Code = g.Code
+        };
+        // Clon simple
+        editandoId = g.Id;
+    }
+
+    private async Task Borrar(int id)
+    {
+        await GlyphService.EliminarForma(id);
+        await CargarLista();
+    }
+}

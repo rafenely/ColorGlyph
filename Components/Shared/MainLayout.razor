@@ -3,12 +3,29 @@
 
 <div class="page">
     <main>
-        <div class="sidebar">
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="admin">
-                    <span class="bi bi-gear-fill-nav-menu" aria-hidden="true"></span> Admin Glifos
-                </NavLink>
-            </div>
+        <div class="nav-container">
+            <nav class="d-flex flex-row justify-content-center p-2 bg-dark">
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link text-white" href="" Match="NavLinkMatch.All">
+                        <span class="bi bi-house-door-fill" aria-hidden="true"></span> Glifos
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link text-white" href="admin">
+                        <span class="bi bi-gear-fill" aria-hidden="true"></span> Edit Glifos
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link text-white" href="adminForms">
+                        <span class="bi bi-pentagon-fill" aria-hidden="true"></span> Edit Formas
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link text-white" href="adminColors">
+                        <span class="bi bi-palette-fill" aria-hidden="true"></span> Edit Colores
+                    </NavLink>
+                </div>
+            </nav>
         </div>
 
         <article class="content px-4">

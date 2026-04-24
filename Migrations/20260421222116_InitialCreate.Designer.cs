@@ -19,7 +19,7 @@ namespace ColorGlyphs.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
 
-            modelBuilder.Entity("LenguajeDeColores.Models.Cuadricula", b =>
+            modelBuilder.Entity("ColorGlyphs.Models.Cuadricula", b =>
                 {
                     b.Property<char>("Letra")
                         .HasColumnType("TEXT");

@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // 1. SERVICIOS
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite("Data Source=LenguajeColores.db"));
+    options.UseSqlite("Data Source=ColorGlyphs.db"));
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<GlyphService>();

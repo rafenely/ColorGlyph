@@ -12,5 +12,5 @@ public class GlyphModel
 
     public string Colores { get; set; } = string.Empty;
 
-    public string Forma { get; set; } = "Circulo";
+    public List<GlyphForm> GlyphForms { get; set; } = new();
 }
