@@ -6,6 +6,8 @@
 @using ColorGlyphs.Services
 
 @inject GlyphService GlyphService
+@inject IJSRuntime JSRuntime
+
 @rendermode InteractiveServer
 <h3 class="mb-4">Administración de Glyphos</h3>
 
@@ -28,6 +30,21 @@
             <button class="btn btn-primary w-100" @onclick="Guardar">
                 @(editandoId == 0 ? "Añadir" : "Actualizar")
             </button>
+        </div>
+        <div class="card p-3 mb-4 bg-light border-warning">
+            <h6><span class="bi bi-exclamation-triangle-fill"></span> Acción Masiva: Cambiar todas las formas</h6>
+            <div class="d-flex gap-2 align-items-center">
+                <select class="form-select w-auto" @bind="formaMasivaSeleccionada">
+                    <option value="">-- Selecciona una forma --</option>
+                    @foreach (var f in todasLasFormas)
+                    {
+                        <option value="@f.Description">@f.Description</option>
+                    }
+                </select>
+                <button class="btn btn-warning" @onclick="AplicarCambioMasivo">
+                    Aplicar a todos los Glifos
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -69,9 +86,13 @@
     private string formasTexto = ""; // Para manejar el input de texto
     private int editandoId = 0;
 
+    private string formaMasivaSeleccionada = "";
+    private List<FormModel> todasLasFormas = new();
+
     protected override async Task OnInitializedAsync()
     {
         await CargarLista();
+        todasLasFormas = await GlyphService.ObtenerFormas(); // Necesitarás este método en el service
     }
 
     private async Task CargarLista()
@@ -124,5 +145,20 @@
     {
         await GlyphService.Eliminar(id);
         await CargarLista();
+    }
+
+    private async Task AplicarCambioMasivo()
+    {
+        if (string.IsNullOrEmpty(formaMasivaSeleccionada)) return;
+
+        bool confirmar = await JSRuntime.InvokeAsync<bool>("confirm",
+            new object[] { $"¿Seguro que quieres cambiar TODOS los glifos a {formaMasivaSeleccionada}?" });
+
+        if (confirmar)
+        {
+            await GlyphService.CambiarTodasLasFormas(formaMasivaSeleccionada);
+            await CargarLista();
+            StateHasChanged();
+        }
     }
 }

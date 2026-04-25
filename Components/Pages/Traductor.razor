@@ -24,54 +24,91 @@
               placeholder="Escribe aquí...">
     </textarea>
 </div>
+<div class="d-flex justify-content-center mb-3">
+    <div class="btn-group" role="group" aria-label="Alineación">
+        <button type="button" class="btn btn-outline-secondary @(alineacion == "start" ? "active" : "")" 
+                @onclick='() => CambiarAlineacion("start")'>
+            <span class="bi bi-text-left"></span>
+        </button>
+        <button type="button" class="btn btn-outline-secondary @(alineacion == "center" ? "active" : "")" 
+                @onclick='() => CambiarAlineacion("center")'>
+            <span class="bi bi-text-center"></span>
+        </button>
+        <button type="button" class="btn btn-outline-secondary @(alineacion == "end" ? "active" : "")" 
+                @onclick='() => CambiarAlineacion("end")'>
+            <span class="bi bi-text-right"></span>
+        </button>
+        <button type="button" class="btn btn-outline-secondary @(alineacion == "between" ? "active" : "")" 
+            @onclick='() => CambiarAlineacion("between")'>
+            <span class="bi bi-justify"></span>
+        </button>
+    </div>
+        <div class="d-flex align-items-center gap-3 mb-3 justify-content-center">
+            <label class="form-label mb-0">Tamaño:</label>
+            <input type="range" min="30" max="100" @bind="glyphSize" @bind:event="oninput" />
+            <span>@(glyphSize)px</span>
+        </div>
+</div>
 <div class="form-check form-switch mb-3">
     <input class="form-check-input" type="checkbox" id="checkMostrar" @bind="mostrarLetras" />
     <label class="form-check-label" for="checkMostrar">
         Mostrar etiquetas de letras
     </label>
 </div>
-<div class="hoja-libreta mt-4">
-    
-        @foreach (var cuadricula in GlyphService.TraducirTexto(textoUsuario))
-        {
-            @if (cuadricula.Tipo == "Salto")
+<div class="hoja-libreta mt-4 d-flex flex-wrap justify-content-@alineacion">
+    @foreach (var linea in textoUsuario.Split('\n'))
+    {
+        <div class="d-flex flex-wrap justify-content-@alineacion" style="flex-basis: 100%;">
+            @* Luego separamos por espacios para identificar cada palabra *@
+            @foreach (var palabra in linea.Split(' '))
             {
-                @* Esta línea fuerza a los siguientes glifos a ir a la fila de abajo *@
-                <div class="flex-break" style="flex-basis: 100%; height: 20px;"></div>
-            }
-            else
-            {
-                <div class="cuadro-letra">
-                    <div class="marco-dibujo">
-                        <div class="rejilla-puntos">
-                            @{
-
-                                // Preparamos las listas de forma segura
-                                var colores = cuadricula.Colores.Split(',');
-                                var formas = cuadricula.GlyphForms;
-
-                            }
-                            @for(int i= 0; i<colores.Length; i++)
-                            {
-
-                                var formaActual = (cuadricula.Tipo == "Especial" && i < formas.Count()) 
-                                                    ? formas[i].Form.Description 
-                                                    : cuadricula.GlyphForms.First().Form.Description;
-
-
-                                <div class="punto " 
-                                        style=" @GetFormaStyle(formaActual)  background-color: @TraducirColor(colores[i]);">
-                                </div>                                      
-                                }
-                        </div>
-                    </div>
-                    @if(mostrarLetras)
+                <div class="grupo-palabra d-flex shadow-none">
+                    @foreach (var cuadricula in GlyphService.TraducirTexto(palabra))
                     {
-                        <span class="etiqueta-letra">@cuadricula.Caracter</span>@**@
+                        @if (cuadricula.Tipo == "Salto")
+                        {
+                            @* Esta línea fuerza a los siguientes glifos a ir a la fila de abajo *@
+                            <div class="flex-break" style="flex-basis: 100%; height: @(glyphSize / 2)px;">
+                            
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="cuadro-letra" style="width: @(glyphSize)px; height: @(glyphSize)px;">
+                                <div class="marco-dibujo">
+                                    <div class="rejilla-puntos">
+                                        @{
+                                            // Preparamos las listas de forma segura
+                                            var colores = cuadricula.Colores.Split(',');
+                                            var formas = cuadricula.GlyphForms;
+                                            var formaBase = formas.FirstOrDefault()?.Form?.Description ?? "Cuadrada";
+                                        }
+                                        @for(int i= 0; i<colores.Length; i++)
+                                        {
+
+                                            var formaActual = (cuadricula.Tipo == "Especial" && i < formas.Count()) 
+                                                                ? formas[i].Form.Description 
+                                                                : formaBase;
+
+                                            <div class="punto" 
+                                                    style="@GetFormaStyle(formaActual)  background-color: @TraducirColor(colores[i]);">
+                                            </div>                                      
+                                        }
+                                    </div>
+                                </div>
+                                @if(mostrarLetras)
+                                {
+                                    <span class="etiqueta-letra" style="font-size: @(glyphSize/4)px;">@cuadricula.Caracter</span>@**@
+                                }
+                            </div>
+                        }
                     }
                 </div>
+                <div class="espacio-blanco" style="width: @(glyphSize+4)px;"></div>
             }
+        </div>
         }
+        
     
 </div>
 <style>
@@ -96,34 +133,50 @@
         flex-direction: column;
         align-items: center;
         margin: 2px;
+        transition: all 0.2s ease;
     }
     .grupo-palabra {
             display: flex;
             flex-wrap: nowrap; /* IMPORTANTE: Las letras de una palabra NO se separan */
-            gap: 10px;         /* Espacio entre letras de la misma palabra */
+            /*gap: 10px;         /* Espacio entre letras de la misma palabra */
         }
     /* El marco individual de cada letra */
     .marco-dibujo {
-        background: rgba(83, 52, 52, 0);
-        /*border: 2px solid #444;*/
+        /*background: rgba(83, 52, 52, 0);
+        border: 2px solid #444;
         padding: 0px;
-        border-radius: 4px;
+        border-radius: 4px;*/
         /*  box-shadow: 3px 3px 0px #888; /* Efecto de relieve */
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .rejilla-puntos {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-        width: 50px;
-        height: 50px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-content: space-around;
+        height: 100%;
+        width: 100%;
+        padding: 2px;
     }
 
     .punto {
-        width: 20px;
-        height: 20px;
-        @*border-radius: 50%;*@
-        border: 1px solid rgba(0, 0, 0, 0);
+        width: 35%;
+        height: 35%;
+        margin: 2%;
+        @*border-radius: 50%;
+        border: 50% solid rgba(0, 0, 0, 0);*@
+        filter: url(#ink-effect); 
+
+        /* Toque final: Ligeramente translúcido para que se vea el papel detrás */
+        opacity: 0.9;
+        
+        /* Pequeño desenfoque muy sutil para simular absorción */
+        box-shadow: 0 0 2px rgba(0,0,0,0.2) inset;
     }
     .forma-circulo { border-radius: 50%; }
     .forma-cuadrado { border-radius: 2px; }
@@ -149,23 +202,35 @@
         font-size: 0.9rem;
         text-transform: uppercase;
     }
+    .espacio-blanco {
+    display: inline-block;
+    flex-shrink: 0; /* Evita que el espacio se comprima si hay poco sitio */
+    }
 </style>
-@*<div class="alert alert-info">
-    Debug: Texto escrito: "<b>@textoUsuario</b>" | Cuadros encontrados en DB: <b>@cantidadEncontrada</b>
-</div>
-
-<input value="@textoUsuario" 
-       @oninput="@((e) => ActualizarTraduccion(e))" 
-       class="form-control" 
-       placeholder="Escribe aquí..." />
-<button class="btn btn-primary" @onclick='() => textoUsuario = "BOTON FUNCIONA"'>
-    Probar Conexión
-</button>*@
+<svg width="0" height="0" style="position:absolute;z-index:-1;">
+    <defs>
+        <filter id="ink-effect">
+            <feTurbulence type="fractalNoise" 
+                          baseFrequency="0.04" 
+                          numOctaves="3" 
+                          result="noise" />
+            
+            <feDisplacementMap in="SourceGraphic" 
+                               in2="noise" 
+                               scale="5" 
+                               xChannelSelector="R" 
+                               yChannelSelector="G" />
+            
+            <feGaussianBlur stdDeviation="0.5" />
+        </filter>
+    </defs>
+</svg>
 @code {
     private string textoUsuario = "";
     private int cantidadEncontrada = 0;
     private bool mostrarLetras = false;
-
+    private string alineacion = "start";
+    private int glyphSize = 60;
     // Esta función se ejecutará cada vez que cambie el texto
     private void ActualizarTraduccion(ChangeEventArgs e)
     {
@@ -177,8 +242,6 @@
     private string TraducirColor(string forma)
     {
         var dbColor = GlyphService.GetColorCode(forma);
-        Console.WriteLine("/*/*/*/*/*/*/");
-        Console.WriteLine(dbColor);
         return dbColor;
     }
 
@@ -186,5 +249,10 @@
     {
         var dbForma = GlyphService.GetFormCode(forma);
         return dbForma;
+    }
+
+    private void CambiarAlineacion(string nuevaAlineacion)
+    {
+        alineacion = nuevaAlineacion;
     }
 }

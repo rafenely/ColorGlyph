@@ -239,4 +239,32 @@ public class GlyphService
 
         return color.Code;
     }
+
+    public async Task CambiarTodasLasFormas(string nombreNuevaForma)
+    {
+        // 1. Buscamos la forma destino
+        var formaDb = await _context.Forms
+            .FirstOrDefaultAsync(f => f.Description.ToLower() == nombreNuevaForma.ToLower());
+
+        if (formaDb == null) return;
+
+        // 2. Traemos todos los glifos con sus relaciones actuales
+        var todosLosGlyphs = await _context.Glyphs.Include(g => g.GlyphForms).ToListAsync();
+
+        foreach (var glyph in todosLosGlyphs)
+        {
+            // Limpiamos las formas actuales
+            _context.GlyphForms.RemoveRange(glyph.GlyphForms);
+
+            // Asignamos la nueva forma
+            glyph.GlyphForms.Add(new GlyphForm
+            {
+                GlyphId = glyph.Id,
+                FormId = formaDb.Id,
+                Order = 1
+            });
+        }
+
+        await _context.SaveChangesAsync();
+    }
 }
