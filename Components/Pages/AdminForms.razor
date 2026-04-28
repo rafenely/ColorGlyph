@@ -5,7 +5,7 @@
 @using ColorGlyphs.Components.Shared
 @using ColorGlyphs.Services
 
-@inject GlyphService GlyphService
+@inject ConfigService ConfigService
 @rendermode InteractiveServer
 <h3 class="mb-4">Administración de Formas</h3>
 
@@ -65,14 +65,14 @@
 
     private async Task CargarLista()
     {
-        todasLasFormas = await GlyphService.ObtenerFormas();
+        todasLasFormas = await ConfigService.ObtenerFormas();
     }
 
     private async Task Guardar()
     {
         if (string.IsNullOrEmpty(nuevoGlyphForm.Description)) return;
-        if (editandoId == 0) await GlyphService.CrearForma(nuevoGlyphForm);
-        else await GlyphService.ActualizarForma(nuevoGlyphForm);
+        if (editandoId == 0) await ConfigService.CrearForma(nuevoGlyphForm);
+        else await ConfigService.ActualizarForma(nuevoGlyphForm);
 
         nuevoGlyphForm = new();
         editandoId = 0;
@@ -93,7 +93,7 @@
 
     private async Task Borrar(int id)
     {
-        await GlyphService.EliminarForma(id);
+        await ConfigService.EliminarForma(id);
         await CargarLista();
     }
 }

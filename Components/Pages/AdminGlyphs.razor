@@ -4,8 +4,10 @@
 @using ColorGlyphs.Components
 @using ColorGlyphs.Components.Shared
 @using ColorGlyphs.Services
+@using System.Runtime.InteropServices
 
 @inject GlyphService GlyphService
+@inject ConfigService ConfigService
 @inject IJSRuntime JSRuntime
 
 @rendermode InteractiveServer
@@ -92,7 +94,7 @@
     protected override async Task OnInitializedAsync()
     {
         await CargarLista();
-        todasLasFormas = await GlyphService.ObtenerFormas(); // Necesitarás este método en el service
+        todasLasFormas = await ConfigService.ObtenerFormas();
     }
 
     private async Task CargarLista()
@@ -104,11 +106,12 @@
     {
         if (string.IsNullOrEmpty(nuevoGlyph.Caracter)) return;
 
-        nuevoGlyph.Tipo = GlyphService.GetGlyphType(nuevoGlyph);
-        nuevoGlyph.GlyphForms = await GlyphService.ConvertirTextoAFormas(formasTexto);
-
+        nuevoGlyph.Tipo = nuevoGlyph.GetGlyphType();
+        nuevoGlyph.GlyphForms = await ConfigService.ConvertirTextoAFormas(formasTexto);
+        Console.WriteLine("/*/*/*/*/ */ */* /* /*/*");
+        Console.WriteLine(editandoId);
         if (editandoId == 0) await GlyphService.Crear(nuevoGlyph);
-        else await GlyphService.Actualizar(nuevoGlyph);
+        else await GlyphService.Modificar(nuevoGlyph);
 
         nuevoGlyph = new();
         formasTexto = "";
@@ -126,7 +129,6 @@
             GlyphForms = g.GlyphForms,
             Colores = g.Colores
         };
-        
         if (g.GlyphForms != null && g.GlyphForms.Any())
         {
             formasTexto = string.Join(",", g.GlyphForms
@@ -156,7 +158,7 @@
 
         if (confirmar)
         {
-            await GlyphService.CambiarTodasLasFormas(formaMasivaSeleccionada);
+            await ConfigService.CambiarTodasLasFormas(formaMasivaSeleccionada);
             await CargarLista();
             StateHasChanged();
         }

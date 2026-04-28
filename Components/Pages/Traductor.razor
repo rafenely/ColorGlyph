@@ -7,6 +7,7 @@
 @using Microsoft.AspNetCore.Components.Web
 @using System.Runtime.InteropServices
 @rendermode InteractiveServer
+@inject TranslationService TranslationService
 @inject GlyphService GlyphService
 
 <PageTitle>Traductor de Colores</PageTitle>
@@ -62,8 +63,10 @@
             @* Luego separamos por espacios para identificar cada palabra *@
             @foreach (var palabra in linea.Split(' '))
             {
+                var textoTraducido =  TraducirTexto(palabra);
+
                 <div class="grupo-palabra d-flex shadow-none">
-                    @foreach (var cuadricula in GlyphService.TraducirTexto(palabra))
+                    @foreach (var cuadricula in textoTraducido)
                     {
                         @if (cuadricula.Tipo == "Salto")
                         {
@@ -235,19 +238,28 @@
     private void ActualizarTraduccion(ChangeEventArgs e)
     {
         textoUsuario = e.Value?.ToString() ?? "";
-        var resultado = GlyphService.TraducirTexto(textoUsuario);
+        var resultado = TranslationService.TraducirTexto(textoUsuario).Result;
         cantidadEncontrada = resultado.Count;
+    }
+    private List<GlyphModel> TraducirTexto(string text)
+    {
+        return TranslationService.TraducirTexto(text).Result;
     }
 
     private string TraducirColor(string forma)
     {
-        var dbColor = GlyphService.GetColorCode(forma);
+        var dbColor = TranslationService.GetColorCode(forma).Result;
+        if(dbColor == "")
+            dbColor = "unset";
         return dbColor;
     }
 
     private string GetFormaStyle(string forma)
     {
-        var dbForma = GlyphService.GetFormCode(forma);
+        var dbForma = TranslationService.GetFormCode(forma).Result;
+
+        if(dbForma == "")
+            dbForma = "border-radius: 0%;";
         return dbForma;
     }
 

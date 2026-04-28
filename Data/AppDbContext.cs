@@ -17,7 +17,7 @@ public class AppDbContext : DbContext
     {
         // Configuramos la llave primaria compuesta para la tabla intermedia
         modelBuilder.Entity<GlyphForm>()
-            .HasKey(gf => new { gf.GlyphId, gf.FormId });
+            .HasKey(gf => new { gf.Id });
 
         modelBuilder.Entity<GlyphForm>()
             .HasOne(gf => gf.Glyph)

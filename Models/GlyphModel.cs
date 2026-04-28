@@ -13,4 +13,15 @@ public class GlyphModel
     public string Colores { get; set; } = string.Empty;
 
     public List<GlyphForm> GlyphForms { get; set; } = new();
+
+    public string GetGlyphType()
+    {
+        string normal = "Consonante";
+        string especial = "Especial";
+
+        if (GlyphForms.Count() > 1)
+            return especial;
+
+        return normal;
+    }
 }

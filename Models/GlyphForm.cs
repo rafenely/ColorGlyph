@@ -3,6 +3,8 @@ namespace ColorGlyphs.Models;
 
 public class GlyphForm
 {
+    [Key] // Identificador único
+    public int Id { get; set; }
     public int GlyphId { get; set; }
     public GlyphModel Glyph { get; set; } = null!;
 

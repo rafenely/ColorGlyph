@@ -8,10 +8,10 @@ namespace ColorGlyphs.Controllers;
 [Route("api/[controller]")]
 public class TraductorController : ControllerBase
 {
-    private readonly GlyphService _traductorService;
+    private readonly TranslationService _traductorService;
     private readonly AppDbContext _context;
 
-    public TraductorController(GlyphService traductorService, AppDbContext context)
+    public TraductorController(TranslationService traductorService, AppDbContext context)
     {
         _traductorService = traductorService;
         _context = context;

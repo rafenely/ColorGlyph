@@ -11,6 +11,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<GlyphService>();
+builder.Services.AddScoped<ConfigService>();
+builder.Services.AddScoped<TranslationService>();
 
 // Registro de Blazor
 builder.Services.AddRazorComponents()

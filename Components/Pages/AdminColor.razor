@@ -5,7 +5,9 @@
 @using ColorGlyphs.Components.Shared
 @using ColorGlyphs.Services
 
-@inject GlyphService GlyphService
+@inject TranslationService TranslationService
+@inject ConfigService ConfigService
+
 @rendermode InteractiveServer
 <h3 class="mb-4">Administración de Colores</h3>
 
@@ -65,14 +67,14 @@
 
     private async Task CargarLista()
     {
-        allColors = await GlyphService.ObtenerColores();
+        allColors = await ConfigService.ObtenerColores();
     }
 
     private async Task Guardar()
     {
         if (string.IsNullOrEmpty(newGlyphColor.Description)) return;
-        if (editandoId == 0) await GlyphService.CrearColor(newGlyphColor);
-        else await GlyphService.ActualizarColor(newGlyphColor);
+        if (editandoId == 0) await ConfigService.CrearColor(newGlyphColor);
+        else await ConfigService.ActualizarColor(newGlyphColor);
 
         newGlyphColor = new();
         editandoId = 0;
@@ -93,7 +95,7 @@
 
     private async Task Borrar(int id)
     {
-        await GlyphService.EliminarForma(id);
+        await ConfigService.EliminarForma(id);
         await CargarLista();
     }
 }
