@@ -1,0 +1,21 @@
+@using ColorGlyphs.Services
+@inject TranslationService TranslationService
+
+<div class="punto" style="@_estiloFinal"></div>
+
+@code {
+    [Parameter] public string Forma { get; set; } = "";
+    [Parameter] public string Color { get; set; } = "";
+
+    private string _estiloFinal = "";
+
+    // OnParametersSetAsync se ejecuta automáticamente cuando cambian los parámetros
+    protected override async Task OnParametersSetAsync()
+    {
+        var codigoForma = await TranslationService.GetFormCode(Forma);
+        var codigoColor = await TranslationService.GetColorCode(Color);
+
+        // Combinamos ambos estilos
+        _estiloFinal = $"{codigoForma} background-color: {codigoColor};";
+    }
+}

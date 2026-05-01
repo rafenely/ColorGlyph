@@ -60,10 +60,7 @@ public class TranslationService
 
         if (color == null)
         {
-            // Si no existe, devolvemos un estilo por defecto (ej: cuadrado)
-            // Esto evita que el Traductor se rompa
             return new GlyphColorModel() { }.Code;
-
         }
 
         return color.Code;

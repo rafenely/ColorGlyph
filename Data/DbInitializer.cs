@@ -42,7 +42,21 @@ namespace ColorGlyphs.Data
                 },
                 new GlyphModel
                 {
+                    Caracter = "É",
+                    Tipo = "Vocal",
+                    Colores = "Azul,Azul,Azul,Azul",
+                    //GlyphForms = "Triangulo"
+                },
+                new GlyphModel
+                {
                     Caracter = "I",
+                    Tipo = "Vocal",
+                    Colores = "Rojo,Rojo,Rojo,Rojo",
+                    //GlyphForms = "Estrella"
+                },
+                new GlyphModel
+                {
+                    Caracter = "Í",
                     Tipo = "Vocal",
                     Colores = "Rojo,Rojo,Rojo,Rojo",
                     //GlyphForms = "Estrella"
@@ -56,7 +70,21 @@ namespace ColorGlyphs.Data
                 },
                 new GlyphModel
                 {
+                    Caracter = "Ú",
+                    Tipo = "Vocal",
+                    Colores = "Verde,Verde,Verde,Verde",
+                    //GlyphForms = "Rombo"
+                },
+                new GlyphModel
+                {
                     Caracter = "O",
+                    Tipo = "Vocal",
+                    Colores = "Morado,Morado,Morado,Morado",
+                    //GlyphForms = "Circulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "Ó",
                     Tipo = "Vocal",
                     Colores = "Morado,Morado,Morado,Morado",
                     //GlyphForms = "Circulo"
@@ -128,14 +156,14 @@ namespace ColorGlyphs.Data
                 {
                     Caracter = "M",
                     Tipo = "Consonante",
-                    Colores = "Amarillo,Morado,Morado",
+                    Colores = "Amarillo,Morado,Morado,",
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
                 {
                     Caracter = "N",
                     Tipo = "Consonante",
-                    Colores = "Azul,Rojo,Rojo",
+                    Colores = "Azul,Rojo,Rojo,",
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -149,7 +177,7 @@ namespace ColorGlyphs.Data
                 {
                     Caracter = "P",
                     Tipo = "Consonante",
-                    Colores = "Morado,Azul,Morado",
+                    Colores = "Morado,Azul,Morado,",
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -184,7 +212,7 @@ namespace ColorGlyphs.Data
                 {
                     Caracter = "V",
                     Tipo = "Consonante",
-                    Colores = "Morado,Morado,Naranja",
+                    Colores = "Morado,Morado,Naranja,",
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -212,7 +240,7 @@ namespace ColorGlyphs.Data
                 {
                     Caracter = "Z",
                     Tipo = "Consonante",
-                    Colores = "Naranja,Naranja,,Verde,",
+                    Colores = "Naranja,Naranja,,Verde",
                     //GlyphForms = "Circulo"
                 }
             };
@@ -228,7 +256,7 @@ namespace ColorGlyphs.Data
             {
                 new FormModel
                 {
-                    Description = "cuadrada",
+                    Description = "cuadrado",
                     Code = "border-radius: 2px;"
                 },
                 new FormModel
@@ -310,15 +338,17 @@ namespace ColorGlyphs.Data
                 // Asignamos el Triángulo a la letra A
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "A").Id, FormId = formaCirculo.Id, Order = 1 },
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "Á").Id, FormId = formaCirculo.Id, Order = 1 },
-                new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "Á").Id, FormId = formaTriangulo.Id, Order = 2 },
-                new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "B").Id, FormId = formaTriangulo.Id, Order = 1 },
+                new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "Á").Id, FormId = formaCirculo.Id, Order = 2 },
+                new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "B").Id, FormId = formaCirculo.Id, Order = 1 },
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "C").Id, FormId = formaCirculo.Id, Order = 1 },
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "D").Id, FormId = formaCirculo.Id, Order = 1 },
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "E").Id, FormId = formaCirculo.Id, Order = 1 },
+                new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "É").Id, FormId = formaCirculo.Id, Order = 1 },
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "F").Id, FormId = formaCirculo.Id, Order = 1 },
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "G").Id, FormId = formaCirculo.Id, Order = 1 },
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "H").Id, FormId = formaCirculo.Id, Order = 1 },
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "I").Id, FormId = formaCirculo.Id, Order = 1 },
+                new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "Í").Id, FormId = formaCirculo.Id, Order = 1 },
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "J").Id, FormId = formaCirculo.Id, Order = 1 },
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "K").Id, FormId = formaCirculo.Id, Order = 1 },
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "L").Id, FormId = formaCirculo.Id, Order = 1 },
@@ -326,12 +356,14 @@ namespace ColorGlyphs.Data
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "N").Id, FormId = formaCirculo.Id, Order = 1 },
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "Ñ").Id, FormId = formaCirculo.Id, Order = 1 },
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "O").Id, FormId = formaCirculo.Id, Order = 1 },
+                new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "Ó").Id, FormId = formaCirculo.Id, Order = 1 },
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "P").Id, FormId = formaCirculo.Id, Order = 1 },
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "Q").Id, FormId = formaCirculo.Id, Order = 1 },
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "R").Id, FormId = formaCirculo.Id, Order = 1 },
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "S").Id, FormId = formaCirculo.Id, Order = 1 },
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "T").Id, FormId = formaCirculo.Id, Order = 1 },
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "U").Id, FormId = formaCirculo.Id, Order = 1 },
+                new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "Ú").Id, FormId = formaCirculo.Id, Order = 1 },
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "V").Id, FormId = formaCirculo.Id, Order = 1 },
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "W").Id, FormId = formaCirculo.Id, Order = 1 },
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "X").Id, FormId = formaCirculo.Id, Order = 1 },

@@ -61,8 +61,6 @@ public class ConfigService
                 it++;
             }
         }
-        Console.WriteLine("////////****************************************/*********");
-        Console.WriteLine(listaRelaciones.Count);
         return listaRelaciones;
     }
 
