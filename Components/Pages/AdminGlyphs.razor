@@ -154,7 +154,7 @@
         if (string.IsNullOrEmpty(formaMasivaSeleccionada)) return;
 
         bool confirmar = await JSRuntime.InvokeAsync<bool>("confirm",
-            new object[] { $"¿Seguro que quieres cambiar TODOS los glifos a {formaMasivaSeleccionada}?" });
+            new object[] { $"¿No mames Gabriela! Segura que quieres cambiar TODOS los glifos a {formaMasivaSeleccionada}?" });
 
         if (confirmar)
         {
