@@ -28,17 +28,14 @@
     {
         var colores = GlyphModel.Colores.Split(',');
         var formas = GlyphModel.GlyphForms.ToList();
-        Console.WriteLine("Forma?? " + GlyphModel.GlyphForms.First().Form.Code);
 
-        var formaBase = formas.FirstOrDefault()?.Form?.Description ?? "Cuadrada";
-
+        var formaBase = formas.FirstOrDefault()?.Form?.Code ?? "Cuadrada";
+        //Console.WriteLine("/* Formas " + formas.Count);
         for (int i = 0; i < colores.Length; i++)
         {
-            var formaActual = (GlyphModel.Tipo == "Especial" && i < formas.Count)
-                                ? formas[i].Form.Description
+            var formaActual = (i < formas.Count)
+                                ? formas[i].Form.Code
                                 : formaBase;
-            Console.WriteLine("NOMAMESGABRIELA " + formaActual);
-            Console.WriteLine("FormaBase " + formaBase);
             yield return (Forma: formaActual, Color: colores[i]);
         }
 

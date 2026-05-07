@@ -8,6 +8,7 @@ namespace ColorGlyphs.Services;
 public class TranslationService
 {
     private readonly AppDbContext _context;
+    private Dictionary<string, string> _cacheColores = new();
 
     public TranslationService(AppDbContext context)
     {
@@ -53,10 +54,12 @@ public class TranslationService
         return forma.Code;
     }
 
-    public async Task<string> GetColorCode(string descripcion)
+    public async Task<string> GetColorCode(string colorName)
     {
+        if (_cacheColores.TryGetValue(colorName, out var hex)) return hex;
+
         var color = await _context.Colours
-        .FirstOrDefaultAsync(f => f.Description.ToLower() == descripcion.ToLower().Trim());
+        .FirstOrDefaultAsync(f => f.Description.ToLower() == colorName.ToLower().Trim());
 
         if (color == null)
         {

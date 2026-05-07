@@ -57,7 +57,7 @@ public class ConfigService
             var formaDb = allForms.FirstOrDefault(f => f.Description.ToLower() == nombre);
             if (formaDb != null)
             {
-                listaRelaciones.Add(new GlyphForm { FormId = formaDb.Id, Order = it });
+                listaRelaciones.Add(new GlyphForm { Form = formaDb, FormId = formaDb.Id, Order = it });
                 it++;
             }
         }

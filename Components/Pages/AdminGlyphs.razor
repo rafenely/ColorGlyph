@@ -5,6 +5,7 @@
 @using ColorGlyphs.Components.Shared
 @using ColorGlyphs.Services
 @using System.Runtime.InteropServices
+@using System.Threading.Tasks
 
 @inject GlyphService GlyphService
 @inject ConfigService ConfigService
@@ -17,21 +18,77 @@
     <h5>@(editandoId == 0 ? "Agregar Nuevo Glifo" : "Modificando Glifo")</h5>
     <div class="row g-3">
         <div class="col-md-2">
+            <label class="form-label">preGlyph</label>
+            <Glyph GlyphModel="@nuevoGlyph" Size="60" />
+        </div>
+        <div class="col-md-2">
             <label class="form-label">Carácter/Símbolo</label>
             <input type="text" class="form-control" @bind="nuevoGlyph.Caracter" maxlength="1" />
         </div>
-        <div class="col-md-3">
-            <label class="form-label">Formas (ej: circulo,triangulo)</label>
-            <input type="text" class="form-control" @bind="formasTexto" placeholder="Circulo,Triangulo..." />
+        <div type="hidden" class="col-md-3">
+            <!--<label class="form-label text-muted small">Formas (ej: circulo,triangulo)</label>-->
+            <input type="hidden" class="form-control" @bind="formasTexto" readonly />
         </div>
-        <div class="col-md-3">
-            <label class="form-label">Colores (separados por coma)</label>
-            <input type="text" class="form-control" @bind="nuevoGlyph.Colores" placeholder="Rojo,Azul..." />
+        <div type="hidden" class="col-md-3">
+            <!--<label class="form-label text-muted small">Colores (separados por coma)</label>-->
+            <input type="hidden" class="form-control" @bind="nuevoGlyph.Colores" readonly />
         </div>
-        <div class="col-md-2 d-flex align-items-end">
-            <button class="btn btn-primary w-100" @onclick="Guardar">
-                @(editandoId == 0 ? "Añadir" : "Actualizar")
-            </button>
+        <div class="row g-3 p-3 border rounded bg-light">
+            <div class="col-md-6">
+                <label class="form-label fw-bold text-primary">Colores seleccionados (en orden):</label>
+                <div class="d-flex flex-wrap gap-2 mb-2 p-2 border rounded bg-white min-height-50">
+                    @foreach (var c in coloresSeleccionados)
+                    {
+                        <span class="badge rounded-pill d-flex align-items-center"
+                              style="background-color: @c.Code; color: rgb(255, 255, 255); padding: 8px 12px;">
+                            @c.Description
+                            @if (c.Description == "")
+                            {
+                                <i class="bi bi-x-circle-fill ms-2 cursor-pointer bg-black text-white rounded-circle"
+                                   @onclick="() => RemoverColor(c)"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-x-circle-fill ms-2 cursor-pointer" @onclick="() => RemoverColor(c)"></i>
+                            }
+                        </span>
+                    }
+                </div>
+                <div class="d-flex flex-wrap gap-1">
+                    @foreach (var c in listaColoresDisponibles)
+                    {
+                        <button class="btn btn-sm btn-outline-secondary" @onclick="() => AgregarColor(c)">
+                            + @c.Description
+                        </button>
+                    }
+                </div>
+            </div>
+
+            <div class="col-md-6 border-start">
+                <label class="form-label fw-bold text-success">Formas seleccionadas (en orden):</label>
+                <div class="d-flex flex-wrap gap-2 mb-2 p-2 border rounded bg-white min-height-50">
+                    @foreach (var f in formasSeleccionadas)
+                    {
+                        <span class="badge bg-success d-flex align-items-center" style="padding: 8px 12px;">
+                            @f.Description
+                            <i class="bi bi-x-circle-fill ms-2 cursor-pointer" @onclick="() => RemoverForma(f)"></i>
+                        </span>
+                    }
+                </div>
+                <div class="d-flex flex-wrap gap-1">
+                    @foreach (var f in listaFormasDisponibles)
+                    {
+                        <button class="btn btn-sm btn-outline-success" @onclick="() => AgregarForma(f)">
+                            + @f.Description
+                        </button>
+                    }
+                </div>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button class="btn btn-primary w-100" @onclick="Guardar">
+                    @(editandoId == 0 ? "Añadir" : "Actualizar")
+                </button>
+            </div>
         </div>
         <div class="card p-3 mb-4 bg-light border-warning">
             <h6><span class="bi bi-exclamation-triangle-fill"></span> Acción Masiva: Cambiar todas las formas</h6>
@@ -85,7 +142,16 @@
         }
     </tbody>
 </table>
+<style>
+    .cursor-pointer {
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
 
+    .cursor-pointer:hover {
+        transform: scale(1.2);
+    }
+</style>
 @code {
     private List<GlyphModel> todosLosGlyphs = new();
     private GlyphModel nuevoGlyph = new();
@@ -99,6 +165,10 @@
     {
         await CargarLista();
         todasLasFormas = await ConfigService.ObtenerFormas();
+        listaFormasDisponibles = todasLasFormas; // Ya las tienes cargadas
+        listaColoresDisponibles = await ConfigService.ObtenerColores();
+
+        listaColoresDisponibles.Add(new GlyphColorModel() { Code = "#00000000", Description = "" });
     }
 
     private async Task CargarLista()
@@ -117,12 +187,16 @@
 
         nuevoGlyph = new();
         formasTexto = "";
+        coloresSeleccionados.Clear();
+        formasSeleccionadas.Clear();
         editandoId = 0;
         await CargarLista();
+        StateHasChanged();
     }
 
     private void CargarParaEditar(GlyphModel g)
     {
+        editandoId = g.Id;
         nuevoGlyph = new GlyphModel
         {
             Id = g.Id,
@@ -141,8 +215,25 @@
         {
             formasTexto = "";
         }
-    
-        editandoId = g.Id;
+        // 1. Sincronizar Formas
+        formasSeleccionadas = nuevoGlyph.GlyphForms
+                            .Where(gf => gf.Form != null)
+                            .Select(gf => gf.Form!)
+                            .ToList();
+        formasTexto = string.Join(",", formasSeleccionadas.Select(f => f.Description));
+
+        // 2. Sincronizar Colores
+        var nombresColores = g.Colores.Split(',', StringSplitOptions.RemoveEmptyEntries);
+        coloresSeleccionados.Clear();
+        foreach (var nombre in nombresColores)
+        {
+            var colorEncontrado = listaColoresDisponibles.FirstOrDefault(c => c.Description.Equals(nombre.Trim(),
+            StringComparison.OrdinalIgnoreCase));
+            if (colorEncontrado != null)
+            {
+                coloresSeleccionados.Add(colorEncontrado);
+            }
+        }
     }
 
     private async Task Borrar(int id)
@@ -164,5 +255,62 @@
             await CargarLista();
             StateHasChanged();
         }
+    }
+
+    private List<GlyphColorModel> coloresSeleccionados = new();
+    private List<FormModel> formasSeleccionadas = new();
+
+    // Estos vendrían de tus servicios
+    private List<GlyphColorModel> listaColoresDisponibles = new();
+    private List<FormModel> listaFormasDisponibles = new();
+
+    private async Task AgregarColor(GlyphColorModel color)
+    {
+        if (coloresSeleccionados.Count < 4)
+        {
+            coloresSeleccionados.Add(color);
+            await ActualizarStringColores();
+        }
+    }
+
+    private async Task RemoverColor(GlyphColorModel color)
+    {
+        coloresSeleccionados.Remove(color);
+        await ActualizarStringColores();
+    }
+
+    private async Task ActualizarStringColores()
+    {
+        // Esto mantiene sincronizado tu objeto con el string de la DB
+        nuevoGlyph.Colores = string.Join(",", coloresSeleccionados.Select(c => c.Description));
+        await ActualizarPreviewGlyph();
+    }
+
+    private async Task AgregarForma(FormModel form)
+    {
+        if (formasSeleccionadas.Count < 4)
+        {
+            formasSeleccionadas.Add(form);
+            await ActualizarStringFormas();
+        }
+    }
+
+    private async Task RemoverForma(FormModel form)
+    {
+        formasSeleccionadas.Remove(form);
+        await ActualizarStringFormas();
+    }
+
+    private async Task ActualizarStringFormas()
+    {
+        // Esto mantiene sincronizado tu objeto con el string de la DB
+        formasTexto = string.Join(",", formasSeleccionadas.Select(c => c.Description));
+        await ActualizarPreviewGlyph();
+    }
+
+    private async Task ActualizarPreviewGlyph()
+    {
+        nuevoGlyph.GlyphForms = await ConfigService.ConvertirTextoAFormas(formasTexto);
+        StateHasChanged();
     }
 }
