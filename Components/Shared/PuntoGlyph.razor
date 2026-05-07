@@ -14,7 +14,9 @@
     {
         var codigoForma = await TranslationService.GetFormCode(Forma);
         var codigoColor = await TranslationService.GetColorCode(Color);
-
+        Console.WriteLine("/*/*  codigoForma: " + codigoForma);
+        Console.WriteLine("/*/*  Forma: " + Forma);
+        Console.WriteLine("/*/*  codigoColor: " + codigoColor);
         // Combinamos ambos estilos
         _estiloFinal = $"{codigoForma} background-color: {codigoColor};";
     }

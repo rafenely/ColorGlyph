@@ -52,6 +52,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSb3V0ZXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/Users/ricar/repos/ColorGlyphs/Components/Shared/GlyphFilters.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTaGFyZWRcR2x5cGhGaWx0ZXJzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Users/ricar/repos/ColorGlyphs/Components/Shared/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTaGFyZWRcTWFpbkxheW91dC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
@@ -67,3 +71,7 @@ build_metadata.AdditionalFiles.CssScope =
 [D:/Users/ricar/repos/ColorGlyphs/Components/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xfSW1wb3J0cy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Users/ricar/repos/ColorGlyphs/Components/Shared/Glyph.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTaGFyZWRcR2x5cGgucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-nawtpk9tet

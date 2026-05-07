@@ -37,7 +37,6 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// ESTA LÍNEA es la que quita el error 404 de app.css y blazor.web.js
 app.UseStaticFiles();
 
 app.UseAntiforgery();

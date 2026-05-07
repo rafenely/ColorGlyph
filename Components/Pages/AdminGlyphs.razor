@@ -54,6 +54,7 @@
 <table class="table table-hover align-middle">
     <thead class="table-dark">
         <tr>
+            <th>Glypho</th>
             <th>Carácter</th>
             <th>Formas</th>
             <th>Colores</th>
@@ -64,6 +65,9 @@
         @foreach (var g in todosLosGlyphs.OrderBy(x => x.Caracter))
         {
             <tr>
+                <td>
+                    <Glyph GlyphModel="@g" />
+                </td>
                 <td><strong>@g.Caracter</strong></td>
                 <td>
                     @foreach (var gf in g.GlyphForms)
@@ -108,8 +112,6 @@
 
         nuevoGlyph.Tipo = nuevoGlyph.GetGlyphType();
         nuevoGlyph.GlyphForms = await ConfigService.ConvertirTextoAFormas(formasTexto);
-        Console.WriteLine("/*/*/*/*/ */ */* /* /*/*");
-        Console.WriteLine(editandoId);
         if (editandoId == 0) await GlyphService.Crear(nuevoGlyph);
         else await GlyphService.Modificar(nuevoGlyph);
 

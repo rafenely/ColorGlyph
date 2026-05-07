@@ -1,0 +1,46 @@
+@using ColorGlyphs.Models
+@using System.Drawing
+@using System.Runtime.InteropServices
+
+<div class="marco-glyph" style="width: @(Size)px; height: @(Size)px;">
+    <div class="rejilla-glyphs" style="filter: url(#@FilterId);">
+        @if (GlyphModel?.Colores != null)
+        {
+            @foreach (var glyphData in GetFormattedGlyphData())
+            {
+                <PuntoGlyph Forma="@glyphData.Forma" Color="@glyphData.Color" />
+            }
+        }
+    </div>
+</div>
+@code {
+    [Parameter, EditorRequired]
+    public GlyphModel GlyphModel { get; set; } = null!;
+
+    [Parameter]
+    public int Size { get; set; } = 60;
+
+    [Parameter]
+    public string FilterId { get; set; } = "Limpio";
+
+    // Estructura para iterar más limpiamente en el HTML
+    private IEnumerable<(string Forma, string Color)> GetFormattedGlyphData()
+    {
+        var colores = GlyphModel.Colores.Split(',');
+        var formas = GlyphModel.GlyphForms.ToList();
+        Console.WriteLine("Forma?? " + GlyphModel.GlyphForms.First().Form.Code);
+
+        var formaBase = formas.FirstOrDefault()?.Form?.Description ?? "Cuadrada";
+
+        for (int i = 0; i < colores.Length; i++)
+        {
+            var formaActual = (GlyphModel.Tipo == "Especial" && i < formas.Count)
+                                ? formas[i].Form.Description
+                                : formaBase;
+            Console.WriteLine("NOMAMESGABRIELA " + formaActual);
+            Console.WriteLine("FormaBase " + formaBase);
+            yield return (Forma: formaActual, Color: colores[i]);
+        }
+
+    }
+}

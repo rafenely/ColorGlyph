@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ColorGlyphs")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+98314755f5b21ffba8b3e21c0453335f1538536a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b7889f13e80f5571e1ed1b6e100b89145d55aa9d")]
 [assembly: System.Reflection.AssemblyProductAttribute("ColorGlyphs")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ColorGlyphs")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -4,6 +4,7 @@
 @using ColorGlyphs.Components
 @using ColorGlyphs.Components.Shared
 @using ColorGlyphs.Services
+@using Microsoft.VisualBasic
 
 @inject ConfigService ConfigService
 @rendermode InteractiveServer
@@ -12,13 +13,17 @@
 <div class="card p-4 mb-5 shadow-sm">
     <h5>@(editandoId == 0 ? "Agregar Nueva Forma" : "Modificando Forma")</h5>
     <div class="row g-3">
+        <div class="col-md-1 d-flex flex-column align-items-center justify-content-center border-end">
+            <label class="form-label small text-muted">Preview</label>
+            <Glyph @key="nuevoGlyphForm.Code" GlyphModel="@nGlyph(nuevoGlyphForm.Code)" Size="50" />
+        </div>
         <div class="col-md-2">
             <label class="form-label">Descripcion</label>
             <input type="text" class="form-control" @bind="nuevoGlyphForm.Description" />
         </div>
         <div class="col-md-6">
             <label class="form-label">Codigo</label>
-            <input type="text" class="form-control" @bind="nuevoGlyphForm.Code"
+            <input type="text" class="form-control" @bind="nuevoGlyphForm.Code" @bind:event="oninput"
                    placeholder="clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);" />
         </div>
         <div class="col-md-2 d-flex align-items-end">
@@ -32,6 +37,7 @@
 <table class="table table-hover align-middle">
     <thead class="table-dark">
         <tr>
+            <th>Glyph</th>
             <th>Descripcion</th>
             <th>Codigo</th>
             <th>Acciones</th>
@@ -41,6 +47,9 @@
         @foreach (var g in todasLasFormas.OrderBy(x => x.Description))
         {
             <tr>
+                <td>
+                    <Glyph GlyphModel="@nGlyph(g.Code)" Size=45 />
+                </td>
                 <td><strong>@g.Description</strong></td>
                 <td><small>@g.Code</small></td>
                 <td>
@@ -95,5 +104,18 @@
     {
         await ConfigService.EliminarForma(id);
         await CargarLista();
+    }
+
+    private GlyphModel nGlyph(string? forma)
+    {
+        var code = string.IsNullOrWhiteSpace(forma) ? "Cuadrada" : forma;
+        Console.WriteLine("Codee?? " + code);
+
+        return new GlyphModel()
+        {
+            Colores = "rojo",
+            GlyphForms = new List<GlyphForm>(){
+                new GlyphForm(){Form = new FormModel(){Code= code,Description=code}}}
+        };
     }
 }

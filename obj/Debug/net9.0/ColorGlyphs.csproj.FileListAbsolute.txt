@@ -1,5 +1,6 @@
 D:\Users\ricar\repos\ColorGlyphs\bin\Debug\net9.0\appsettings.Development.json
 D:\Users\ricar\repos\ColorGlyphs\bin\Debug\net9.0\appsettings.json
+D:\Users\ricar\repos\ColorGlyphs\bin\Debug\net9.0\ColorGlyphs.staticwebassets.runtime.json
 D:\Users\ricar\repos\ColorGlyphs\bin\Debug\net9.0\ColorGlyphs.staticwebassets.endpoints.json
 D:\Users\ricar\repos\ColorGlyphs\bin\Debug\net9.0\ColorGlyphs.exe
 D:\Users\ricar\repos\ColorGlyphs\bin\Debug\net9.0\ColorGlyphs.deps.json
@@ -129,7 +130,11 @@ D:\Users\ricar\repos\ColorGlyphs\obj\Debug\net9.0\ColorGlyphs.sourcelink.json
 D:\Users\ricar\repos\ColorGlyphs\obj\Debug\net9.0\rjimswa.dswa.cache.json
 D:\Users\ricar\repos\ColorGlyphs\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
 D:\Users\ricar\repos\ColorGlyphs\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
+D:\Users\ricar\repos\ColorGlyphs\obj\Debug\net9.0\scopedcss\Components\Shared\Glyph.razor.rz.scp.css
 D:\Users\ricar\repos\ColorGlyphs\obj\Debug\net9.0\scopedcss\bundle\ColorGlyphs.styles.css
+D:\Users\ricar\repos\ColorGlyphs\obj\Debug\net9.0\scopedcss\projectbundle\ColorGlyphs.bundle.scp.css
+D:\Users\ricar\repos\ColorGlyphs\obj\Debug\net9.0\compressed\6whea6f2bi-9hnswirbnd.gz
+D:\Users\ricar\repos\ColorGlyphs\obj\Debug\net9.0\compressed\s99g1wfj2x-9hnswirbnd.gz
 D:\Users\ricar\repos\ColorGlyphs\obj\Debug\net9.0\staticwebassets.build.json
 D:\Users\ricar\repos\ColorGlyphs\obj\Debug\net9.0\staticwebassets.build.json.cache
 D:\Users\ricar\repos\ColorGlyphs\obj\Debug\net9.0\staticwebassets.development.json

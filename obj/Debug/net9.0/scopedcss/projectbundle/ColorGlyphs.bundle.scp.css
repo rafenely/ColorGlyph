@@ -1,0 +1,33 @@
+/* _content/ColorGlyphs/Components/Shared/Glyph.razor.rz.scp.css */
+.marco-glyph[b-nawtpk9tet] {
+    /*background: rgba(83, 52, 52, 0);
+        border: 2px solid #444;
+        padding: 0px;
+        border-radius: 4px;*/
+    /*  box-shadow: 3px 3px 0px #888; /* Efecto de relieve */
+    flex-shrink: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rejilla-glyphs[b-nawtpk9tet] {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-content: space-around;
+    height: 100%;
+    width: 100%;
+    padding: 2px;
+}
+
+[b-nawtpk9tet] .punto {
+    width: 35%;
+    height: 35%;
+    margin: 2%;
+    filter: url(#glyph-effect);
+
+    opacity: 0.9;
+}
