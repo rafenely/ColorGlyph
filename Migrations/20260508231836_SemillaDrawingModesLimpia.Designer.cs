@@ -2,6 +2,7 @@
 using ColorGlyphs.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ColorGlyphs.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260508231836_SemillaDrawingModesLimpia")]
+    partial class SemillaDrawingModesLimpia
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
@@ -129,7 +132,12 @@ namespace ColorGlyphs.Migrations
                         new
                         {
                             Id = 2,
-                            Nombre = "Daltónico"
+                            Nombre = "Élfico"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Nombre = "Rúnico"
                         });
                 });
 

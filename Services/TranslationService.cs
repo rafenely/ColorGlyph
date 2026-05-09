@@ -9,12 +9,11 @@ public class TranslationService
 {
     private readonly AppDbContext _context;
     private Dictionary<string, string> _cacheColores = new();
-
     public TranslationService(AppDbContext context)
     {
         _context = context;
     }
-    public async Task<List<GlyphModel>> TraducirTexto(string texto)
+    public async Task<List<GlyphModel>> TraducirTexto(string texto, int drawingModeId)
     {
         var letrasParaBuscar = texto.SelectMany(c => new[] { c.ToString(), c.ToString().ToUpper() })
         .Distinct()
@@ -24,7 +23,7 @@ public class TranslationService
         var letrasDb = await _context.Glyphs
             .Include(g => g.GlyphForms)
             .ThenInclude(gf => gf.Form)
-            .Where(c => letrasParaBuscar.Contains(c.Caracter))
+            .Where(g => g.DrawingModeId == drawingModeId && letrasParaBuscar.Contains(g.Caracter))
             .ToDictionaryAsync(c => c.Caracter);
 
         return texto.Select(c =>
@@ -41,19 +40,6 @@ public class TranslationService
                 return new GlyphModel { Caracter = original, Colores = "Gris", Tipo = "Desconocido" };
             }).ToList();
     }
-    public async Task<string> GetFormCode(string descripcion)
-    {
-        var forma = await _context.Forms
-        .FirstOrDefaultAsync(f => f.Description.ToLower() == descripcion.ToLower().Trim());
-
-        if (forma == null)
-        {
-            return new FormModel() { }.Code;
-        }
-
-        return forma.Code;
-    }
-
     public async Task<string> GetColorCode(string colorName)
     {
         if (_cacheColores.TryGetValue(colorName, out var hex)) return hex;
@@ -67,5 +53,23 @@ public class TranslationService
         }
 
         return color.Code;
+    }
+    public async Task AplicarModoADibujos(int modoId)
+    {
+        var modo = await _context.DrawingModes.FindAsync(modoId);
+        if (modo == null) return;
+
+        // Buscamos todos los glifos que están vinculados a este modo
+        var glyphs = await _context.Glyphs
+            .Where(g => g.DrawingModeId == modoId)
+            .ToListAsync();
+
+        foreach (var g in glyphs)
+        {
+            //g.Colores = modo.Colores;
+            // Aquí podrías disparar la lógica para refrescar las GlyphForms
+        }
+
+        await _context.SaveChangesAsync();
     }
 }

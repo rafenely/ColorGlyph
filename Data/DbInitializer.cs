@@ -24,6 +24,7 @@ namespace ColorGlyphs.Data
                     Caracter = "A",
                     Tipo = "Vocal",
                     Colores = "Amarillo,Amarillo,Amarillo,Amarillo",
+                    DrawingModeId = 1
                     //GlyphForms = "Cuadrada"
                 },
                 new GlyphModel
@@ -31,6 +32,7 @@ namespace ColorGlyphs.Data
                     Caracter = "Á",
                     Tipo = "Especial",
                     Colores = "Amarillo,Amarillo,Amarillo,Amarillo",
+                    DrawingModeId = 1
                     //GlyphForms = "Cuadrada,Rombo,Cuadrada,Cuadrada"
                 },
                 new GlyphModel
@@ -38,6 +40,7 @@ namespace ColorGlyphs.Data
                     Caracter = "E",
                     Tipo = "Vocal",
                     Colores = "Azul,Azul,Azul,Azul",
+                    DrawingModeId = 1
                     //GlyphForms = "Triangulo"
                 },
                 new GlyphModel
@@ -45,6 +48,7 @@ namespace ColorGlyphs.Data
                     Caracter = "É",
                     Tipo = "Vocal",
                     Colores = "Azul,Azul,Azul,Azul",
+                    DrawingModeId = 1
                     //GlyphForms = "Triangulo"
                 },
                 new GlyphModel
@@ -52,6 +56,7 @@ namespace ColorGlyphs.Data
                     Caracter = "I",
                     Tipo = "Vocal",
                     Colores = "Rojo,Rojo,Rojo,Rojo",
+                    DrawingModeId = 1
                     //GlyphForms = "Estrella"
                 },
                 new GlyphModel
@@ -59,6 +64,7 @@ namespace ColorGlyphs.Data
                     Caracter = "Í",
                     Tipo = "Vocal",
                     Colores = "Rojo,Rojo,Rojo,Rojo",
+                    DrawingModeId = 1
                     //GlyphForms = "Estrella"
                 },
                 new GlyphModel
@@ -66,6 +72,7 @@ namespace ColorGlyphs.Data
                     Caracter = "U",
                     Tipo = "Vocal",
                     Colores = "Verde,Verde,Verde,Verde",
+                    DrawingModeId = 1
                     //GlyphForms = "Rombo"
                 },
                 new GlyphModel
@@ -73,6 +80,7 @@ namespace ColorGlyphs.Data
                     Caracter = "Ú",
                     Tipo = "Vocal",
                     Colores = "Verde,Verde,Verde,Verde",
+                    DrawingModeId = 1
                     //GlyphForms = "Rombo"
                 },
                 new GlyphModel
@@ -80,6 +88,7 @@ namespace ColorGlyphs.Data
                     Caracter = "O",
                     Tipo = "Vocal",
                     Colores = "Morado,Morado,Morado,Morado",
+                    DrawingModeId = 1
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -87,6 +96,7 @@ namespace ColorGlyphs.Data
                     Caracter = "Ó",
                     Tipo = "Vocal",
                     Colores = "Morado,Morado,Morado,Morado",
+                    DrawingModeId = 1
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -94,6 +104,7 @@ namespace ColorGlyphs.Data
                     Caracter = "B",
                     Tipo = "Consonante",
                     Colores = "Azul,Rojo,,Rojo",
+                    DrawingModeId = 1
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -101,6 +112,7 @@ namespace ColorGlyphs.Data
                     Caracter = "C",
                     Tipo = "Consonante",
                     Colores = "Azul,Verde,,Verde",
+                    DrawingModeId = 1
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -108,6 +120,7 @@ namespace ColorGlyphs.Data
                     Caracter = "D",
                     Tipo = "Consonante",
                     Colores = "Azul,Morado,,Morado",
+                    DrawingModeId = 1
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -115,6 +128,7 @@ namespace ColorGlyphs.Data
                     Caracter = "F",
                     Tipo = "Consonante",
                     Colores = "Rojo,,Morado,Morado",
+                    DrawingModeId = 1
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -122,6 +136,7 @@ namespace ColorGlyphs.Data
                     Caracter = "G",
                     Tipo = "Consonante",
                     Colores = "Rojo,,Amarillo,Amarillo",
+                    DrawingModeId = 1
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -129,6 +144,7 @@ namespace ColorGlyphs.Data
                     Caracter = "H",
                     Tipo = "Consonante",
                     Colores = "Amarillo,,Azul,Azul",
+                    DrawingModeId = 1
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -136,6 +152,7 @@ namespace ColorGlyphs.Data
                     Caracter = "J",
                     Tipo = "Consonante",
                     Colores = "Rojo,,Verde,Verde",
+                    DrawingModeId = 1
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -143,6 +160,7 @@ namespace ColorGlyphs.Data
                     Caracter = "K",
                     Tipo = "Consonante",
                     Colores = "Verde,,Rojo,Rojo",
+                    DrawingModeId = 1
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -150,6 +168,7 @@ namespace ColorGlyphs.Data
                     Caracter = "L",
                     Tipo = "Consonante",
                     Colores = "Amarillo,Amarillo,Morado,",
+                    DrawingModeId = 1
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -157,6 +176,7 @@ namespace ColorGlyphs.Data
                     Caracter = "M",
                     Tipo = "Consonante",
                     Colores = "Amarillo,Morado,Morado,",
+                    DrawingModeId = 1
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -164,6 +184,7 @@ namespace ColorGlyphs.Data
                     Caracter = "N",
                     Tipo = "Consonante",
                     Colores = "Azul,Rojo,Rojo,",
+                    DrawingModeId = 1
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -171,6 +192,7 @@ namespace ColorGlyphs.Data
                     Caracter = "Ñ",
                     Tipo = "Consonante",
                     Colores = "Azul,Rojo,Rojo,Rojo",
+                    DrawingModeId = 1
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -178,6 +200,7 @@ namespace ColorGlyphs.Data
                     Caracter = "P",
                     Tipo = "Consonante",
                     Colores = "Morado,Azul,Morado,",
+                    DrawingModeId = 1
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -185,6 +208,7 @@ namespace ColorGlyphs.Data
                     Caracter = "Q",
                     Tipo = "Consonante",
                     Colores = ",Morado,Azul,Azul",
+                    DrawingModeId = 1
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -192,6 +216,7 @@ namespace ColorGlyphs.Data
                     Caracter = "R",
                     Tipo = "Consonante",
                     Colores = ",Amarillo,Rojo,Amarillo",
+                    DrawingModeId = 1
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -199,6 +224,7 @@ namespace ColorGlyphs.Data
                     Caracter = "S",
                     Tipo = "Consonante",
                     Colores = ",Rojo,Naranja,Naranja",
+                    DrawingModeId = 1
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -206,6 +232,7 @@ namespace ColorGlyphs.Data
                     Caracter = "T",
                     Tipo = "Consonante",
                     Colores = "Naranja,,Azul,Azul",
+                    DrawingModeId = 1
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -213,6 +240,7 @@ namespace ColorGlyphs.Data
                     Caracter = "V",
                     Tipo = "Consonante",
                     Colores = "Morado,Morado,Naranja,",
+                    DrawingModeId = 1
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -220,6 +248,7 @@ namespace ColorGlyphs.Data
                     Caracter = "W",
                     Tipo = "Consonante",
                     Colores = ",Naranja,Amarillo,Azul",
+                    DrawingModeId = 1
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -227,6 +256,7 @@ namespace ColorGlyphs.Data
                     Caracter = "X",
                     Tipo = "Consonante",
                     Colores = "Morado,,Amarillo,Morado",
+                    DrawingModeId = 1
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -234,6 +264,7 @@ namespace ColorGlyphs.Data
                     Caracter = "Y",
                     Tipo = "Consonante",
                     Colores = "Naranja,Naranja,Amarillo,",
+                    DrawingModeId = 1
                     //GlyphForms = "Circulo"
                 },
                 new GlyphModel
@@ -241,11 +272,275 @@ namespace ColorGlyphs.Data
                     Caracter = "Z",
                     Tipo = "Consonante",
                     Colores = "Naranja,Naranja,,Verde",
+                    DrawingModeId = 1
                     //GlyphForms = "Circulo"
                 }
             };
 
             context.Glyphs.AddRange(initialGlyphs);
+            context.SaveChanges();
+
+            var colorBlindGlyphs = new List<GlyphModel>
+            {
+                new GlyphModel
+                {
+                    Caracter = "A",
+                    Tipo = "Vocal",
+                    Colores = "Amarillo,Amarillo,Amarillo,Amarillo",
+                    DrawingModeId = 2
+                    //GlyphForms = "Cuadrada"
+                },
+                new GlyphModel
+                {
+                    Caracter = "Á",
+                    Tipo = "Especial",
+                    Colores = "Amarillo,Amarillo,Amarillo,Amarillo",
+                    DrawingModeId = 2
+                    //GlyphForms = "Cuadrada,Rombo,Cuadrada,Cuadrada"
+                },
+                new GlyphModel
+                {
+                    Caracter = "E",
+                    Tipo = "Vocal",
+                    Colores = "Azul,Azul,Azul,Azul",
+                    DrawingModeId = 2
+                    //GlyphForms = "Triangulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "É",
+                    Tipo = "Vocal",
+                    Colores = "Azul,Azul,Azul,Azul",
+                    DrawingModeId = 2
+                    //GlyphForms = "Triangulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "I",
+                    Tipo = "Vocal",
+                    Colores = "Rojo,Rojo,Rojo,Rojo",
+                    DrawingModeId = 2
+                    //GlyphForms = "Estrella"
+                },
+                new GlyphModel
+                {
+                    Caracter = "Í",
+                    Tipo = "Vocal",
+                    Colores = "Rojo,Rojo,Rojo,Rojo",
+                    DrawingModeId = 2
+                    //GlyphForms = "Estrella"
+                },
+                new GlyphModel
+                {
+                    Caracter = "U",
+                    Tipo = "Vocal",
+                    Colores = "Verde,Verde,Verde,Verde",
+                    DrawingModeId = 2
+                    //GlyphForms = "Rombo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "Ú",
+                    Tipo = "Vocal",
+                    Colores = "Verde,Verde,Verde,Verde",
+                    DrawingModeId = 2
+                    //GlyphForms = "Rombo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "O",
+                    Tipo = "Vocal",
+                    Colores = "Morado,Morado,Morado,Morado",
+                    DrawingModeId = 2
+                    //GlyphForms = "Circulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "Ó",
+                    Tipo = "Vocal",
+                    Colores = "Morado,Morado,Morado,Morado",
+                    DrawingModeId = 2
+                    //GlyphForms = "Circulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "B",
+                    Tipo = "Consonante",
+                    Colores = "Azul,Rojo,,Rojo",
+                    DrawingModeId = 2
+                    //GlyphForms = "Circulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "C",
+                    Tipo = "Consonante",
+                    Colores = "Azul,Verde,,Verde",
+                    DrawingModeId = 2
+                    //GlyphForms = "Circulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "D",
+                    Tipo = "Consonante",
+                    Colores = "Azul,Morado,,Morado",
+                    DrawingModeId = 2
+                    //GlyphForms = "Circulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "F",
+                    Tipo = "Consonante",
+                    Colores = "Rojo,,Morado,Morado",
+                    DrawingModeId = 2
+                    //GlyphForms = "Circulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "G",
+                    Tipo = "Consonante",
+                    Colores = "Rojo,,Amarillo,Amarillo",
+                    DrawingModeId = 2
+                    //GlyphForms = "Circulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "H",
+                    Tipo = "Consonante",
+                    Colores = "Amarillo,,Azul,Azul",
+                    DrawingModeId = 2
+                    //GlyphForms = "Circulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "J",
+                    Tipo = "Consonante",
+                    Colores = "Rojo,,Verde,Verde",
+                    DrawingModeId = 2
+                    //GlyphForms = "Circulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "K",
+                    Tipo = "Consonante",
+                    Colores = "Verde,,Rojo,Rojo",
+                    DrawingModeId = 2
+                    //GlyphForms = "Circulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "L",
+                    Tipo = "Consonante",
+                    Colores = "Amarillo,Amarillo,Morado,",
+                    DrawingModeId = 2
+                    //GlyphForms = "Circulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "M",
+                    Tipo = "Consonante",
+                    Colores = "Amarillo,Morado,Morado,",
+                    DrawingModeId = 2
+                    //GlyphForms = "Circulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "N",
+                    Tipo = "Consonante",
+                    Colores = "Azul,Rojo,Rojo,",
+                    DrawingModeId = 2
+                    //GlyphForms = "Circulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "Ñ",
+                    Tipo = "Consonante",
+                    Colores = "Azul,Rojo,Rojo,Rojo",
+                    DrawingModeId = 2
+                    //GlyphForms = "Circulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "P",
+                    Tipo = "Consonante",
+                    Colores = "Morado,Azul,Morado,",
+                    DrawingModeId = 2
+                    //GlyphForms = "Circulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "Q",
+                    Tipo = "Consonante",
+                    Colores = ",Morado,Azul,Azul",
+                    DrawingModeId = 2
+                    //GlyphForms = "Circulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "R",
+                    Tipo = "Consonante",
+                    Colores = ",Amarillo,Rojo,Amarillo",
+                    DrawingModeId = 2
+                    //GlyphForms = "Circulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "S",
+                    Tipo = "Consonante",
+                    Colores = ",Rojo,Naranja,Naranja",
+                    DrawingModeId = 2
+                    //GlyphForms = "Circulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "T",
+                    Tipo = "Consonante",
+                    Colores = "Naranja,,Azul,Azul",
+                    DrawingModeId = 2
+                    //GlyphForms = "Circulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "V",
+                    Tipo = "Consonante",
+                    Colores = "Morado,Morado,Naranja,",
+                    DrawingModeId = 2
+                    //GlyphForms = "Circulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "W",
+                    Tipo = "Consonante",
+                    Colores = ",Naranja,Amarillo,Azul",
+                    DrawingModeId = 2
+                    //GlyphForms = "Circulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "X",
+                    Tipo = "Consonante",
+                    Colores = "Morado,,Amarillo,Morado",
+                    DrawingModeId = 2
+                    //GlyphForms = "Circulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "Y",
+                    Tipo = "Consonante",
+                    Colores = "Naranja,Naranja,Amarillo,",
+                    DrawingModeId = 2
+                    //GlyphForms = "Circulo"
+                },
+                new GlyphModel
+                {
+                    Caracter = "Z",
+                    Tipo = "Consonante",
+                    Colores = "Naranja,Naranja,,Verde",
+                    DrawingModeId = 2
+                    //GlyphForms = "Circulo"
+                }
+            };
+
+            context.Glyphs.AddRange(colorBlindGlyphs);
             context.SaveChanges();
         }
         private static void SeedForms(AppDbContext context)

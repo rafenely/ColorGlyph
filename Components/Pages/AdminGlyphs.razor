@@ -13,7 +13,50 @@
 
 @rendermode InteractiveServer
 <h3 class="mb-4">Administración de Glyphos</h3>
+<div class="card p-3 mb-4 border-info shadow-sm bg-light">
+    <div class="d-flex justify-content-between align-items-center "
+         @onclick="() => mostrarGestorModos = !mostrarGestorModos">
+        <h6 class="mb-0 text-info fw-bold">
+            <i class="bi bi-gear-fill me-2"></i> Gestión de Alfabetos (Modos de Dibujo)
+        </h6>
+        <i class="bi @(mostrarGestorModos ? "bi-chevron-up" : "bi-chevron-down")"></i>
+    </div>
 
+    @if (mostrarGestorModos)
+    {
+        <div class="row g-3 mt-2 pt-3 border-top">
+            <div class="col-md-5">
+                <label class="form-label fw-bold small text-muted">Crear Nuevo Alfabeto</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" @bind="nuevoModoNombre"
+                           placeholder="Ej: Rúnico, Enano, Celestial..." />
+                    <button class="btn btn-info text-white" @onclick="CrearModo">
+                        <i class="bi bi-plus-circle-fill me-1"></i> Crear
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-md-7 border-start">
+                <label class="form-label fw-bold small text-muted">Alfabetos Registrados</label>
+                <div class="d-flex flex-wrap gap-2">
+                    @foreach (var modo in listaModos)
+                    {
+                        <span class="badge bg-secondary p-2 d-flex align-items-center fs-6">
+                            @modo.Nombre
+                            @* No permitimos borrar el ID 1 (Clásico) para no quedarnos sin ningún modo *@
+                            @if (modo.Id != 1)
+                            {
+                                <i class="bi bi-trash-fill ms-2 text-danger cursor-pointer"
+                                   @onclick="() => EliminarModo(modo.Id, modo.Nombre)"
+                                   title="Eliminar este alfabeto y todos sus glifos"></i>
+                            }
+                        </span>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
 <div class="card p-4 mb-5 shadow-sm">
     <h5>@(editandoId == 0 ? "Agregar Nuevo Glifo" : "Modificando Glifo")</h5>
     <div class="row g-3">
@@ -24,6 +67,15 @@
         <div class="col-md-2">
             <label class="form-label">Carácter/Símbolo</label>
             <input type="text" class="form-control" @bind="nuevoGlyph.Caracter" maxlength="1" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label fw-bold">Modo de Dibujo (Alfabeto)</label>
+            <select class="form-select" @bind="modoActivoId" @bind:after="OnModoCambiado">
+                @foreach (var modo in listaModos)
+                {
+                    <option value="@modo.Id">@modo.Nombre</option>
+                }
+            </select>
         </div>
         <div type="hidden" class="col-md-3">
             <!--<label class="form-label text-muted small">Formas (ej: circulo,triangulo)</label>-->
@@ -160,28 +212,41 @@
 
     private string formaMasivaSeleccionada = "";
     private List<FormModel> todasLasFormas = new();
-
+    private List<DrawingMode> listaModos = new();
+    private int modoActivoId = 1;
+    
     protected override async Task OnInitializedAsync()
     {
+        listaModos = await ConfigService.ObtenerModosDeDibujo();
         await CargarLista();
         todasLasFormas = await ConfigService.ObtenerFormas();
         listaFormasDisponibles = todasLasFormas; // Ya las tienes cargadas
         listaColoresDisponibles = await ConfigService.ObtenerColores();
 
         listaColoresDisponibles.Add(new GlyphColorModel() { Code = "#00000000", Description = "" });
+        
     }
 
     private async Task CargarLista()
     {
-        todosLosGlyphs = await GlyphService.ObtenerTodos();
+        var todos = await GlyphService.ObtenerTodos();
+        todosLosGlyphs = todos.Where(g => g.DrawingModeId == modoActivoId).ToList();
+    }
+
+    private async Task OnModoCambiado()
+    {
+        await CargarLista();
+        StateHasChanged();
     }
 
     private async Task Guardar()
     {
         if (string.IsNullOrEmpty(nuevoGlyph.Caracter)) return;
 
+        nuevoGlyph.DrawingModeId = modoActivoId;
         nuevoGlyph.Tipo = nuevoGlyph.GetGlyphType();
         nuevoGlyph.GlyphForms = await ConfigService.ConvertirTextoAFormas(formasTexto);
+        
         if (editandoId == 0) await GlyphService.Crear(nuevoGlyph);
         else await GlyphService.Modificar(nuevoGlyph);
 
@@ -251,7 +316,7 @@
 
         if (confirmar)
         {
-            await ConfigService.CambiarTodasLasFormas(formaMasivaSeleccionada);
+            await ConfigService.CambiarTodasLasFormas(formaMasivaSeleccionada, modoActivoId);
             await CargarLista();
             StateHasChanged();
         }
@@ -312,5 +377,52 @@
     {
         nuevoGlyph.GlyphForms = await ConfigService.ConvertirTextoAFormas(formasTexto);
         StateHasChanged();
+    }
+
+    private bool mostrarGestorModos = false;
+    private string nuevoModoNombre = "";
+
+    // Método para crear un nuevo alfabeto
+    private async Task CrearModo()
+    {
+        if (string.IsNullOrWhiteSpace(nuevoModoNombre)) return;
+
+        var nuevoModo = new DrawingMode
+        {
+            Nombre = nuevoModoNombre.Trim()
+        };
+
+        // Guardamos en la BD usando tu ConfigService
+        await ConfigService.CrearModoDeDibujo(nuevoModo); // Asegúrate de tener este método en el servicio
+        
+        nuevoModoNombre = ""; // Limpiamos el input
+        
+        // Recargamos los modos para que aparezcan en los selects
+        listaModos = await ConfigService.ObtenerModosDeDibujo();
+        StateHasChanged();
+    }
+
+    // Método para eliminar un alfabeto viejo
+    private async Task EliminarModo(int id, string nombre)
+    {
+        // Alerta de seguridad (Cascada: eliminar el modo borrará todos sus glifos asociados)
+        bool confirmar = await JSRuntime.InvokeAsync<bool>("confirm",
+            new object[] { $"¿Segura Gabriela? Si eliminas el alfabeto '{nombre}', se borrarán permanentemente TODOS los glifos que creaste dentro de él." });
+
+        if (confirmar)
+        {
+            await ConfigService.EliminarModoDeDibujo(id); // Asegúrate de tener este método en el servicio
+            
+            // Si el modo que eliminamos era el que estábamos visualizando, regresamos al Clásico (ID 1)
+            if (modoActivoId == id)
+            {
+                modoActivoId = 1;
+            }
+
+            // Recargamos todo
+            listaModos = await ConfigService.ObtenerModosDeDibujo();
+            await CargarLista();
+            StateHasChanged();
+        }
     }
 }

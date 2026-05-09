@@ -2,6 +2,7 @@
 using ColorGlyphs.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ColorGlyphs.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260508231205_InitialRealRelease")]
+    partial class InitialRealRelease
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
@@ -125,11 +128,6 @@ namespace ColorGlyphs.Migrations
                         {
                             Id = 1,
                             Nombre = "Clásico"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Nombre = "Daltónico"
                         });
                 });
 

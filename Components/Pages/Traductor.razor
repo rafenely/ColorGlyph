@@ -8,6 +8,7 @@
 @using System.Runtime.InteropServices
 @rendermode InteractiveServer
 @inject TranslationService TranslationService
+@inject ConfigService ConfigService
 @inject GlyphService GlyphService
 @inject IJSRuntime JS
 
@@ -58,6 +59,15 @@
                     <option value="Limpio">Limpio</option>
                 </select>
             </div>
+            <div class="col-md-3">
+            <label class="form-label fw-bold">Modo de Dibujo (Alfabeto)</label>
+            <select class="form-select" @bind="modoActivoId" @bind:after="OnModoCambiado">
+                @foreach (var modo in listaModos)
+                {
+                    <option value="@modo.Id">@modo.Nombre</option>
+                }
+            </select>
+        </div>
         </div>
         
         <!-- El switch debajo, más discreto -->
@@ -292,14 +302,20 @@
 
 @code {
     private string textoUsuario = "";
-    private List<GlyphModel> glifosRenderizados = new(); // Nueva variable para los glifos
+    private List<GlyphModel> glifosRenderizados = new();
     private bool mostrarLetras = false;
     private string alineacion = "start";
     private int glyphSize = 60;
     private List<List<List<GlyphModel>>> lineasProcesadas = new();
 
     private string estiloSeleccionado = "Limpio";
+    private List<DrawingMode> listaModos = new();
+    private int modoActivoId = 1;
 
+    protected override async Task OnInitializedAsync()
+    {
+        listaModos = await ConfigService.ObtenerModosDeDibujo();
+    }
     private async Task ActualizarTraduccion(ChangeEventArgs e)
     {
         textoUsuario = e.Value?.ToString() ?? "";
@@ -324,7 +340,7 @@
             foreach (var palabra in palabrasRaw)
             {
                 // Aquí usamos AWAIT de forma segura
-                var glifosDePalabra = await TranslationService.TraducirTexto(palabra);
+                var glifosDePalabra = await TranslationService.TraducirTexto(palabra,modoActivoId);
                 palabrasEnLinea.Add(glifosDePalabra);
             }
             nuevasLineas.Add(palabrasEnLinea);
@@ -341,5 +357,10 @@
         {
             await JS.InvokeVoidAsync("descargarImagen", "hojaDescarga");
         }
+    }
+    private async Task OnModoCambiado()
+    {
+        await GenerarEstructuraTraduccion();
+        StateHasChanged();
     }
 }

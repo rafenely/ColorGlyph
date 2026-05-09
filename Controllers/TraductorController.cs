@@ -18,9 +18,9 @@ public class TraductorController : ControllerBase
     }
 
     [HttpGet("{texto}")]
-    public IActionResult GetTraduccion(string texto)
+    public IActionResult GetTraduccion(string texto, int modoActivo = 1)
     {
-        var resultado = _traductorService.TraducirTexto(texto);
+        var resultado = _traductorService.TraducirTexto(texto, modoActivo);
         return Ok(resultado);
     }
 

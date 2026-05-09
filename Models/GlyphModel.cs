@@ -11,6 +11,8 @@ public class GlyphModel
     public string Tipo { get; set; } = "Consonante";
 
     public string Colores { get; set; } = string.Empty;
+    public int DrawingModeId { get; set; }
+    public DrawingMode DrawingMode { get; set; } = null!;
 
     public List<GlyphForm> GlyphForms { get; set; } = new();
 

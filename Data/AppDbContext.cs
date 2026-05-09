@@ -13,9 +13,12 @@ public class AppDbContext : DbContext
     public DbSet<GlyphColorModel> Colours => Set<GlyphColorModel>();
     public DbSet<GlyphForm> GlyphForms => Set<GlyphForm>();
 
+    public DbSet<DrawingMode> DrawingModes => Set<DrawingMode>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Configuramos la llave primaria compuesta para la tabla intermedia
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.Entity<GlyphForm>()
             .HasKey(gf => new { gf.Id });
 
@@ -28,5 +31,16 @@ public class AppDbContext : DbContext
             .HasOne(gf => gf.Form)
             .WithMany()
             .HasForeignKey(gf => gf.FormId);
+
+        modelBuilder.Entity<GlyphModel>()
+            .HasOne(g => g.DrawingMode)
+            .WithMany(m => m.Glyphs)
+            .HasForeignKey(g => g.DrawingModeId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<DrawingMode>().HasData(
+        new DrawingMode { Id = 1, Nombre = "Clásico" },
+        new DrawingMode { Id = 2, Nombre = "Daltónico" }
+        );
     }
 }

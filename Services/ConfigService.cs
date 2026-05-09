@@ -97,16 +97,14 @@ public class ConfigService
         }
     }
 
-    public async Task CambiarTodasLasFormas(string nombreNuevaForma)
+    public async Task CambiarTodasLasFormas(string nombreNuevaForma, int drawingModeId)
     {
-        // 1. Buscamos la forma destino
         var formaDb = await _context.Forms
             .FirstOrDefaultAsync(f => f.Description.ToLower() == nombreNuevaForma.ToLower());
 
         if (formaDb == null) return;
 
-        // 2. Traemos todos los glifos con sus relaciones actuales
-        var todosLosGlyphs = await _context.Glyphs.Include(g => g.GlyphForms).ToListAsync();
+        var todosLosGlyphs = await _context.Glyphs.Where(g => g.DrawingModeId == drawingModeId).Include(g => g.GlyphForms).ToListAsync();
 
         foreach (var glyph in todosLosGlyphs)
         {
@@ -123,5 +121,61 @@ public class ConfigService
         }
 
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<DrawingMode>> ObtenerModosDeDibujo() => await _context.DrawingModes.AsNoTracking().ToListAsync();
+
+    public async Task CrearModoDeDibujo(DrawingMode modo)
+    {
+        _context.DrawingModes.Add(modo);
+        await _context.SaveChangesAsync();
+
+        await CreateGlyphsNewDrawingModes(modo);
+    }
+
+    public async Task CreateGlyphsNewDrawingModes(DrawingMode modo)
+    {
+        int modeId = 1;
+        var glyphsDefaultMode = await _context.Glyphs.AsNoTracking().Where(c => c.DrawingModeId == modeId).Include(gf => gf.GlyphForms).ToListAsync();
+        foreach (GlyphModel glyphModel in glyphsDefaultMode)
+        {
+            var gg = new GlyphModel
+            {
+                Caracter = glyphModel.Caracter,
+                Tipo = glyphModel.Tipo,
+                Colores = glyphModel.Colores,
+                DrawingMode = modo,
+            };
+            Console.WriteLine("here*--**gg: " + gg.Id);
+
+            _context.Add(gg);
+            _context.SaveChanges();
+            Console.WriteLine("here*--**gg: " + gg.Id);
+
+            List<GlyphForm> gForms = new List<GlyphForm>();
+            foreach (var fm in glyphModel.GlyphForms)
+            {
+                var g = new GlyphForm
+                {
+                    GlyphId = gg.Id,
+                    FormId = fm.FormId
+                };
+                gForms.Add(g);
+            }
+            _context.GlyphForms.AddRange(gForms);
+            _context.SaveChanges();
+        }
+
+        _context.SaveChanges();
+    }
+
+    public async Task EliminarModoDeDibujo(int id)
+    {
+        var modo = await _context.DrawingModes.FindAsync(id);
+        if (modo != null)
+        {
+            _context.DrawingModes.Remove(modo);
+            await _context.SaveChangesAsync();
+        }
     }
 }
