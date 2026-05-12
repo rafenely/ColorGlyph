@@ -14,24 +14,51 @@
 
 <PageTitle>Traductor de Colores</PageTitle>
 
-@*<input @bind="textoUsuario" @bind:event="oninput" placeholder="Escribe algo..." class="form-control" />*@
 <div class="container py-5">
-    <h1 class="display-5 fw-bold mb-4 text-dark">ColorGlyph <small class="text-muted fs-6 fw-normal">Traductor Artístico</small></h1>
+    <h1 class="display-5 fw-bold mb-4 text-dark" style="text-align: center;">ColorGlyph <small class="text-muted fs-6 fw-normal">Traductor Artístico</small></h1>
 
-    <div class="mb-4">
-        <label class="form-label fw-semibold text-secondary">Escribe tu mensaje:</label>
-        <textarea class="textarea-minimal w-100" 
-                  value="@textoUsuario" 
-                  @oninput="ActualizarTraduccion"
-                  rows="3" 
-                  placeholder="El texto se convertirá en arte..."></textarea>
-    </div>
-    <div class="controles-panel shadow-sm"><div class="controles-panel shadow-sm">
-        <div class="row g-4 align-items-center">
-            <!-- Alineación (Columna pequeña) -->
+    <div class="sticky-top bg-white pt-2 pb-3 shadow-sm rounded px-3 border mb-4" style="top: 10px; z-index: 1020;">
+        
+        <div class="row g-2 align-items-center mb-3">
+            <div class="col-md-6 col-lg-7">
+                <label class="form-label fw-bold small text-muted mb-1">Escribe tu mensaje:</label>
+                <div class="input-group">
+                    <textarea class="textarea-minimal w-100 form-control" 
+                              value="@textoUsuario" 
+                              @oninput="ActualizarTraduccion"
+                              rows="2" 
+                              placeholder="El texto se convertirá en arte..."></textarea>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-lg-3">
+                <label class="form-label fw-bold small text-muted mb-1">Modo de Dibujo (Alfabeto)</label>
+                <select class="form-select" @bind="modoActivoId" @bind:after="OnModoCambiado">
+                    @foreach (var modo in listaModos)
+                    {
+                        <option value="@modo.Id">@modo.Nombre</option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-2 col-lg-2 text-center border-start d-none d-md-block">
+                <label class="form-label fw-bold small text-success mb-1">Último Glifo</label>
+                <div class="d-flex justify-content-center align-items-center" style="height: 38px;">
+                    @if (lineasProcesadas.Any() && lineasProcesadas.Last().Any() && lineasProcesadas.Last().Last().Any())
+                    {
+                        <Glyph GlyphModel="@lastGlyph" Size="32" />
+                    }
+                    else
+                    {
+                        <span class="text-muted small">-</span>
+                    }
+                </div>
+            </div>
+        </div>
+        
+        <div class="row g-3 align-items-center pt-2 border-top">
             <div class="col-auto">
-                <span class="d-block small text-uppercase fw-bold text-muted mb-2">Alineación</span>
-                <div class="btn-group shadow-sm">
+                <div class="btn-group btn-group-sm shadow-sm">
                     <button class="btn btn-outline-primary @(alineacion=="start"?"active":"")" @onclick='()=>CambiarAlineacion("start")'><i class="bi bi-text-left"></i></button>
                     <button class="btn btn-outline-primary @(alineacion=="center"?"active":"")" @onclick='()=>CambiarAlineacion("center")'><i class="bi bi-text-center"></i></button>
                     <button class="btn btn-outline-primary @(alineacion=="end"?"active":"")" @onclick='()=>CambiarAlineacion("end")'><i class="bi bi-text-right"></i></button>
@@ -39,50 +66,43 @@
                 </div>
             </div>
 
-            <!-- Tamaño (Columna flexible) -->
-            <div class="col px-4">
-                <span class="d-block small text-uppercase fw-bold text-muted mb-2">Tamaño de Glifos (@glyphSize px)</span>
-                <input type="range" class="form-range" min="30" max="100" @bind="glyphSize" @bind:event="oninput" />
+            <div class="col px-3">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="small text-muted fw-bold text-nowrap">Size: @glyphSize px</span>
+                    <input type="range" class="form-range" min="30" max="100" @bind="glyphSize" @bind:event="oninput" />
+                </div>
             </div>
 
-            <!-- Acciones (Columna de ancho fijo) -->
             <div class="col-auto">
-                <button class="btn btn-dark btn-descargar shadow" @onclick="DescargarHoja">
-                    <i class="bi bi-download me-2"></i> Descargar Imagen
-                </button>
-            </div>
-            <div class="col-lg-3">
-                <span class="d-block small text-uppercase fw-bold text-muted mb-2">Estilo Artístico</span>
-                <select @bind="estiloSeleccionado" class="form-select shadow-sm">
+                <select @bind="estiloSeleccionado" class="form-select form-select-sm shadow-sm">
                     <option value="Tinta">Tinta Tradicional</option>
                     <option value="Neon">Luz Neón</option>
                     <option value="Limpio">Limpio</option>
                 </select>
             </div>
-            <div class="col-md-3">
-            <label class="form-label fw-bold">Modo de Dibujo (Alfabeto)</label>
-            <select class="form-select" @bind="modoActivoId" @bind:after="OnModoCambiado">
-                @foreach (var modo in listaModos)
-                {
-                    <option value="@modo.Id">@modo.Nombre</option>
-                }
-            </select>
+
+            <div class="col-auto">
+                <button class="btn btn-sm btn-dark shadow-sm" @onclick="DescargarHoja">
+                    <i class="bi bi-download me-1"></i> Imagen
+                </button>
+            </div>
+
+            <div class="col-auto border-start ps-3">
+                <div class="form-check form-switch mb-0">
+                    <input class="form-check-input" type="checkbox" id="checkMostrar" @bind="mostrarLetras" />
+                    <label class="form-check-label small text-muted fw-bold" for="checkMostrar">Letras</label>
+                </div>
+            </div>
         </div>
-        </div>
-        
-        <!-- El switch debajo, más discreto -->
-        <div class="form-check form-switch mt-3 pt-3 border-top">
-            <input class="form-check-input" type="checkbox" id="checkMostrar" @bind="mostrarLetras" />
-            <label class="form-check-label small text-muted" for="checkMostrar">Mostrar traducción debajo</label>
-        </div>
+
     </div>
+
     <div id="hojaDescarga" class="hoja-libreta mt-4 d-flex flex-wrap justify-content-@alineacion">
-            <GlyphFilters Theme="@estiloSeleccionado" />
+        <GlyphFilters Theme="@estiloSeleccionado" />
 
         @foreach (var linea in lineasProcesadas)
         {
             <div class="d-flex flex-wrap justify-content-@alineacion" style="flex-basis: 100%;">
-                @* Luego separamos por espacios para identificar cada palabra *@
                 @foreach (var palabra in linea)
                 {
                     <div class="grupo-palabra d-flex shadow-none">
@@ -90,19 +110,16 @@
                         {
                             @if (cuadricula.Tipo == "Salto")
                             {
-                                @* Esta línea fuerza a los siguientes glifos a ir a la fila de abajo *@
-                                <div class="flex-break" style="flex-basis: 100%; height: @(glyphSize / 2)px;">
-                                
-                                </div>
+                                <div class="flex-break" style="flex-basis: 100%; height: @(glyphSize / 2)px;"></div>
                             }
                             else
                             {
-                                <div class="cuadro-letra" >
-                                    <Glyph GlyphModel="@cuadricula"Size="@glyphSize" />
+                                <div class="cuadro-letra">
+                                    <Glyph GlyphModel="@cuadricula" Size="@glyphSize" />
 
                                     @if(mostrarLetras)
                                     {
-                                        <span class="etiqueta-letra" style="font-size: @(glyphSize/6)px;">@cuadricula.Caracter</span>@**@
+                                        <span class="etiqueta-letra" style="font-size: @(glyphSize/6)px;">@cuadricula.Caracter</span>
                                     }
                                 </div>
                             }
@@ -114,50 +131,31 @@
                     }
                 }
             </div>
-            }
-            
-        
+        }
     </div>
 </div>
-</div>
+
 <style>
-    /* El fondo de la zona donde aparecen las letras */
     .hoja-libreta {
-        /* Color base de papel crema/marfil */
         background-color: #fdfcf0; 
-        
-        /* Textura de papel sutil usando un gradiente radial */
-       background-image: 
-        linear-gradient(90deg, rgba(200,0,0,0.05) 0%, rgba(200,0,0,0.05) 100%), /* Línea roja */
-        linear-gradient(#e1dec2 1px, transparent 1px); /* Líneas horizontales opcionales */
+        background-image: 
+            linear-gradient(90deg, rgba(200,0,0,0.05) 0%, rgba(200,0,0,0.05) 100%), 
+            linear-gradient(#e1dec2 1px, transparent 1px); 
         background-size: 100% 100%, 100% 40px;
         background-position: 45px 0, 0 0;
         background-repeat: no-repeat, repeat;
-        
-        /* Cuadrícula de guía sutil (opcional, puedes comentarla) */
-        /* background-image: radial-gradient(#d1d1d1 1px, transparent 1px);
-        background-size: 40px 40px; */
-
         padding: 60px;
         border: 1px solid #dcd9c6;
-        border-radius: 4px; /* Menos redondeado para parecer papel cortado */
-        
-        /* Sombra de "hoja sobre mesa" */
-        box-shadow: 
-            0 1px 4px rgba(0,0,0,0.1), 
-            0 10px 20px rgba(0,0,0,0.05);
-        
+        border-radius: 4px; 
+        box-shadow: 0 1px 4px rgba(0,0,0,0.1), 0 10px 20px rgba(0,0,0,0.05);
         display: flex;
         flex-wrap: wrap;
         min-height: 500px;
         align-content: flex-start;
-        gap: 15px; /* Más espacio entre palabras */
-        
-        /* Efecto de borde de papel ligeramente irregular */
+        gap: 15px; 
         position: relative;
         overflow: hidden;
     }
-    /* Efecto de "margen de libreta" (la línea roja vertical) */
     .hoja-libreta::before {
         content: "";
         position: absolute;
@@ -167,24 +165,9 @@
         width: 2px;
         background-color: rgba(255, 0, 0, 0.15);
     }
-    .hoja-libreta2{
-        background-color: #ffffff;
-        /*background-image: radial-gradient(#d1d1d1 1.5px, transparent 1.5px);
-        background-size: 30px 30px; /* Tamaño de la cuadrícula de fondo */
-        padding: 50px;
-        border: 1px solid #e0e0e0;
-        border-radius: 12px;
-        box-shadow: inset 0 0 10px rgba(0,0,0,0.05), 0 5px 15px rgba(0,0,0,0.1);
-        display: flex;
-        flex-wrap: wrap;
-        gap: 25px;
-        min-height: 300px;
-        align-content: flex-start;
-        gap: 5px;
-    }
     @@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
     }
     .cuadro-letra {
         display: flex;
@@ -196,48 +179,15 @@
         animation: fadeIn 0.3s ease-out forwards;
     }
     .grupo-palabra {
-            display: flex;
-            flex-wrap: nowrap; /* IMPORTANTE: Las letras de una palabra NO se separan */
-            /*gap: 10px;         /* Espacio entre letras de la misma palabra */
-    }
-    /* El marco individual de cada letra */
-    .marco-dibujo {
-        /*background: rgba(83, 52, 52, 0);
-        border: 2px solid #444;
-        padding: 0px;
-        border-radius: 4px;*/
-        /*  box-shadow: 3px 3px 0px #888; /* Efecto de relieve */
-        flex-shrink: 0;
-        width: 100%;
-        height: 100%;
         display: flex;
-        justify-content: center;
-        align-items: center;
+        flex-wrap: nowrap; 
     }
-
-    .rejilla-puntos {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        align-content: space-around;
-        height: 100%;
-        width: 100%;
-        padding: 2px;
-    }
-
     .punto {
         width: 35%;
         height: 35%;
         margin: 2%;
-        @*border-radius: 50%;
-        border: 50% solid rgba(0, 0, 0, 0);*@
         filter: url(#ink-effect); 
-
-        /* Toque final: Ligeramente translúcido para que se vea el papel detrás */
         opacity: 0.9;
-        
-        /* Pequeño desenfoque muy sutil para simular absorción */
-        /*box-shadow: 0 0 2px rgba(0,0,0,0.2) inset;*/
     }
     .etiqueta-letra {
         display: block;
@@ -250,54 +200,22 @@
         white-space: nowrap;
         text-transform: uppercase;
     }
-    .espacio-blanco {
-    display: inline-block;
-    flex-shrink: 0; /* Evita que el espacio se comprima si hay poco sitio */
-    }
-
-    .controles-panel {
-        background: #f8f9fa;
-        border: 1px solid #dee2e6;
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin-bottom: 2rem;
-    }
-
-    /* Chuleando el slider (Range) */
-    .form-range::-webkit-slider-thumb {
-        background: #0d6efd;
-    }
-
-    /* Chuleando los botones */
     .btn-group .btn {
-        padding: 10px 15px;
-        border-width: 2px;
+        padding: 6px 12px;
     }
-
-    .btn-lg {
-        font-weight: 600;
-        letter-spacing: 0.5px;
-        transition: all 0.3s ease;
+    .textarea-minimal {
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 0.5rem;
+        font-size: 1.1rem;
+        transition: border-color 0.2s;
+        background: #fff;
     }
-
-    .btn-lg:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(25, 135, 84, 0.3);
+    .textarea-minimal:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+        outline: none;
     }
-    textarea-minimal {
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    padding: 1rem;
-    font-size: 1.1rem;
-    transition: border-color 0.2s;
-    background: #fff;
-}
-
-.textarea-minimal:focus {
-    border-color: #0d6efd;
-    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
-    outline: none;
-}
 </style>
 
 @code {
@@ -311,6 +229,7 @@
     private string estiloSeleccionado = "Limpio";
     private List<DrawingMode> listaModos = new();
     private int modoActivoId = 1;
+    private GlyphModel? lastGlyph;
 
     protected override async Task OnInitializedAsync()
     {
@@ -339,13 +258,15 @@
 
             foreach (var palabra in palabrasRaw)
             {
-                // Aquí usamos AWAIT de forma segura
                 var glifosDePalabra = await TranslationService.TraducirTexto(palabra,modoActivoId);
                 palabrasEnLinea.Add(glifosDePalabra);
             }
             nuevasLineas.Add(palabrasEnLinea);
         }
         lineasProcesadas = nuevasLineas;
+        
+        if(lineasProcesadas.Any() && lineasProcesadas.Last().Any() && lineasProcesadas.Last().Last().Any())
+            lastGlyph = lineasProcesadas.Last().Last().Last();
     }   
     private void CambiarAlineacion(string nuevaAlineacion)
     {

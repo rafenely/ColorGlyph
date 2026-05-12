@@ -1,0 +1,29 @@
+/* Hace que la barra se quede fija en el tope de la pantalla al hacer scroll */
+.barra-comandos {
+    position: -webkit-sticky;
+    /* Soporte para Safari antiguo */
+    position: sticky;
+    top: 10px;
+    /* Margen de separación con el borde superior de la ventana */
+    z-index: 1020;
+    /* Asegura que la barra quede por ENCIMA de los glifos al flotar */
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.3s ease;
+}
+
+/* Opcional: Un pequeño efecto visual para que los bloques de glifos se vean más estéticos */
+.bloque-glifo {
+    min-width: 75px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.bloque-glifo:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    border-color: #0d6efd !important;
+}
+
+/* Efecto de transición suave */
+.transition-all {
+    transition: all 0.2s ease-in-out;
+}
