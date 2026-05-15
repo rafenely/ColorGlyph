@@ -276,12 +276,30 @@
     {
         if (JS is not null)
         {
-            await JS.InvokeVoidAsync("descargarImagen", "hojaDescarga");
+            string nombreSugerido = ObtenerNombreArchivo();
+
+            await JS.InvokeVoidAsync("descargarImagen", "hojaDescarga",nombreSugerido);
         }
     }
     private async Task OnModoCambiado()
     {
         await GenerarEstructuraTraduccion();
         StateHasChanged();
+    }
+
+    private string ObtenerNombreArchivo()
+    {
+        if (string.IsNullOrWhiteSpace(textoUsuario)) return "ColorGlyph_Arte";
+
+        // Tomamos las primeras 3 palabras, quitamos caracteres raros y limitamos la longitud
+        var palabras = textoUsuario.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                                .Take(3);
+        
+        var nombreBase = string.Join("_", palabras);
+        
+        // Limpieza básica de caracteres no permitidos en nombres de archivo
+        var nombreLimpio = string.Concat(nombreBase.Split(System.IO.Path.GetInvalidFileNameChars()));
+
+        return nombreLimpio.Length > 30 ? nombreLimpio.Substring(0, 30) : nombreLimpio;
     }
 }

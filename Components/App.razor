@@ -18,7 +18,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
     <script>
-        window.descargarImagen = (idElemento) => {
+        window.descargarImagen = (idElemento, fileName) => {
         const nodo = document.getElementById(idElemento);
 
         const opciones = {
@@ -27,14 +27,15 @@
         'border-radius': '0' // Evita artefactos visuales en las esquinas
         }
         };
-
+        const nameLine = 'c';
         domtoimage.toPng(nodo, opciones)
         .then(() => {
         return domtoimage.toPng(nodo, opciones);
         })
         .then(function (dataUrl) {
         const link = document.createElement('a');
-        link.download = 'ColorGlyph_Mensaje.png';
+        const messageName = 'ColorGlypsh_' + fileName;
+        link.download = messageName + '.png';
         link.href = dataUrl;
         link.click();
         })

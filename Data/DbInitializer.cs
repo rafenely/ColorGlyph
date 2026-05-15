@@ -630,7 +630,6 @@ namespace ColorGlyphs.Data
 
             var relaciones = new List<GlyphForm>
             {
-                // Asignamos el Triángulo a la letra A
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "A").Id, FormId = formaCirculo.Id, Order = 1 },
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "Á").Id, FormId = formaCirculo.Id, Order = 1 },
                 new GlyphForm { GlyphId = context.Glyphs.First(g => g.Caracter == "Á").Id, FormId = formaCirculo.Id, Order = 2 },
